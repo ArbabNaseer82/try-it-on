@@ -143,6 +143,46 @@ export function ProductPage() {
 
 The camera needs a secure context: `https://` or `http://localhost`.
 
+## Create your own products and filters
+
+Every product is a small JSON **asset manifest**, plus one file for products that need it:
+
+| You want                                                | `type`                                        | File you provide                |
+| ------------------------------------------------------- | --------------------------------------------- | ------------------------------- |
+| Lipstick, blush, eyeshadow, eyeliner, brows, foundation | `makeup.*`                                    | none, only colors               |
+| Beauty filter (full makeup look)                        | `makeup.look`                                 | none                            |
+| Hair color                                              | `hair.color`                                  | none                            |
+| Fun face filter, sticker, mask                          | `face.overlay2d`                              | PNG with transparent background |
+| Glasses, hats, earrings, watches, rings                 | `glasses`, `hat`, `earrings`, `watch`, `ring` | GLB 3D model in millimeters     |
+| T-shirt or top (experimental)                           | `clothing.top`                                | PNG plus 4 anchor points        |
+
+```json
+{ "version": 1, "id": "ruby", "type": "makeup.lips", "color": "#B0123A", "finish": "satin" }
+```
+
+```json
+{
+  "version": 1,
+  "id": "moustache",
+  "type": "face.overlay2d",
+  "image": "moustache.png",
+  "anchor": "mouth",
+  "scale": 0.55
+}
+```
+
+```json
+{ "version": 1, "id": "aviator", "type": "glasses", "model": "aviator.glb" }
+```
+
+Check your files before shipping:
+
+```bash
+npx -p @tryonit/core tryonit-validate public/tryon
+```
+
+Step by step recipes for every type (beauty filters, stickers, 3D models, variants, hosting, Shopify and CMS loading, troubleshooting): **[Creating products and filters](./docs/CREATING_PRODUCTS.md)**.
+
 ## Implementation guide
 
 ### Step 1: Install
@@ -365,17 +405,19 @@ Minimum versions are targets derived from WebGL2, WebAssembly SIMD and `getUserM
 
 ## Documentation
 
-| Topic                                                | Link                                                     |
-| ---------------------------------------------------- | -------------------------------------------------------- |
-| Architecture, data flow, adding an asset type        | [docs/ARCHITECTURE.md](./docs/ARCHITECTURE.md)           |
-| Asset manifest reference                             | [docs/MANIFEST_SPEC.md](./docs/MANIFEST_SPEC.md)         |
-| Theming and customization                            | [docs/THEMING.md](./docs/THEMING.md)                     |
-| Creating 3D and 2D assets                            | [docs/ASSET_AUTHORING.md](./docs/ASSET_AUTHORING.md)     |
-| Performance                                          | [docs/PERFORMANCE.md](./docs/PERFORMANCE.md)             |
-| Privacy and self hosting                             | [docs/PRIVACY.md](./docs/PRIVACY.md)                     |
-| Local development and testing (including on a phone) | [docs/LOCAL_TESTING.md](./docs/LOCAL_TESTING.md)         |
-| Dependency versions                                  | [docs/DEPENDENCIES.md](./docs/DEPENDENCIES.md)           |
-| React Native plan                                    | [docs/REACT_NATIVE_PLAN.md](./docs/REACT_NATIVE_PLAN.md) |
+| Topic                                                       | Link                                                     |
+| ----------------------------------------------------------- | -------------------------------------------------------- |
+| **Create your own products and filters (formats, recipes)** | [docs/CREATING_PRODUCTS.md](./docs/CREATING_PRODUCTS.md) |
+| Architecture, data flow, adding an asset type               | [docs/ARCHITECTURE.md](./docs/ARCHITECTURE.md)           |
+| Asset manifest reference                                    | [docs/MANIFEST_SPEC.md](./docs/MANIFEST_SPEC.md)         |
+| Theming and customization                                   | [docs/THEMING.md](./docs/THEMING.md)                     |
+| Creating 3D and 2D assets                                   | [docs/ASSET_AUTHORING.md](./docs/ASSET_AUTHORING.md)     |
+| Performance                                                 | [docs/PERFORMANCE.md](./docs/PERFORMANCE.md)             |
+| Privacy and self hosting                                    | [docs/PRIVACY.md](./docs/PRIVACY.md)                     |
+| Local development and testing (including on a phone)        | [docs/LOCAL_TESTING.md](./docs/LOCAL_TESTING.md)         |
+| Dependency versions                                         | [docs/DEPENDENCIES.md](./docs/DEPENDENCIES.md)           |
+| React Native plan                                           | [docs/REACT_NATIVE_PLAN.md](./docs/REACT_NATIVE_PLAN.md) |
+| Publishing to npm (maintainers)                             | [docs/PUBLISHING.md](./docs/PUBLISHING.md)               |
 
 ## FAQ
 

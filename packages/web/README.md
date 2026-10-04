@@ -138,8 +138,48 @@ ngAfterViewInit() { this.handle = mount(this.host.nativeElement, { asset: this.a
 ngOnDestroy() { this.handle.destroy(); }
 ```
 
+## Create your own products and filters
+
+Every product is a small JSON **asset manifest**, plus one file for products that need it:
+
+| You want                                                | `type`                                        | File you provide                |
+| ------------------------------------------------------- | --------------------------------------------- | ------------------------------- |
+| Lipstick, blush, eyeshadow, eyeliner, brows, foundation | `makeup.*`                                    | none, only colors               |
+| Beauty filter (full makeup look)                        | `makeup.look`                                 | none                            |
+| Hair color                                              | `hair.color`                                  | none                            |
+| Fun face filter, sticker, mask                          | `face.overlay2d`                              | PNG with transparent background |
+| Glasses, hats, earrings, watches, rings                 | `glasses`, `hat`, `earrings`, `watch`, `ring` | GLB 3D model in millimeters     |
+| T-shirt or top (experimental)                           | `clothing.top`                                | PNG plus 4 anchor points        |
+
+```json
+{ "version": 1, "id": "ruby", "type": "makeup.lips", "color": "#B0123A", "finish": "satin" }
+```
+
+```json
+{
+  "version": 1,
+  "id": "moustache",
+  "type": "face.overlay2d",
+  "image": "moustache.png",
+  "anchor": "mouth",
+  "scale": 0.55
+}
+```
+
+```json
+{ "version": 1, "id": "aviator", "type": "glasses", "model": "aviator.glb" }
+```
+
+Check your files before shipping:
+
+```bash
+npx -p @tryonit/core tryonit-validate public/tryon
+```
+
+Step by step recipes for every type (beauty filters, stickers, 3D models, variants, hosting, Shopify and CMS loading, troubleshooting): **[Creating products and filters](https://github.com/ArbabNaseer82/try-it-on/blob/main/docs/CREATING_PRODUCTS.md)**.
+
 ## Requirements
 
-WebGL2 and a secure context (HTTPS or localhost). See the browser table in the [main README](../../README.md#browser-support).
+WebGL2 and a secure context (HTTPS or localhost). See the browser table in the [main README](https://github.com/ArbabNaseer82/try-it-on#browser-support).
 
 MIT licensed.

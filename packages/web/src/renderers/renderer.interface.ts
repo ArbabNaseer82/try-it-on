@@ -19,6 +19,8 @@ export interface FrameState {
   source: TexImageSource;
   /** Increments when the source shows a new frame, so textures are uploaded once. */
   sourceVersion: number;
+  /** True when the stage is shown mirrored (front camera). */
+  mirrored: boolean;
   /** Global intensity 0..1 from the store. */
   intensity: number;
   face: { landmarks: Landmark[]; anchors: FaceAnchors; fade: number } | null;
