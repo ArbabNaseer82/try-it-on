@@ -16,7 +16,8 @@ export interface OverlayMesh {
 
 /**
  * Quad for a flat face sticker. Size is relative to the face width, the image keeps its
- * aspect ratio, and the quad rotates with head roll.
+ * aspect ratio, and the quad rotates with head roll. With `mirrored` (front camera view) the
+ * texture and the horizontal offset are flipped, so artwork and text read as authored on screen.
  */
 export function stickerQuad(
   anchor: Anchor2D,
@@ -26,6 +27,7 @@ export function stickerQuad(
     imageAspect: number;
     frameWidth: number;
     frameHeight: number;
+    mirrored?: boolean;
   },
 ): OverlayMesh {
   const { frameWidth: W, frameHeight: H } = options;
@@ -33,7 +35,8 @@ export function stickerQuad(
   const height = width / options.imageAspect;
   const cos = Math.cos(anchor.angle);
   const sin = Math.sin(anchor.angle);
-  const ox = options.offset[0] * anchor.size * W;
+  const flip = options.mirrored ? -1 : 1;
+  const ox = options.offset[0] * anchor.size * W * flip;
   const oy = options.offset[1] * anchor.size * W;
   const cx = anchor.x * W + ox * cos - oy * sin;
   const cy = anchor.y * H + ox * sin + oy * cos;
@@ -52,7 +55,7 @@ export function stickerQuad(
   ];
   return {
     positions: new Float32Array(uv.flatMap(([u, v]) => corner(u, v))),
-    uvs: new Float32Array(uv.flat()),
+    uvs: new Float32Array(uv.flatMap(([u, v]) => [options.mirrored ? 1 - u : u, v])),
   };
 }
 

@@ -6,7 +6,7 @@
 npm install @tryonit/core
 ```
 
-Most apps use [`@tryonit/react`](../react) or [`@tryonit/web`](../web), which re-export this package. Use core directly for tooling (validating a product catalog in CI, building manifests in a CMS) or a custom renderer.
+Most apps use [`@tryonit/react`](https://github.com/ArbabNaseer82/try-it-on/tree/main/packages/react) or [`@tryonit/web`](https://github.com/ArbabNaseer82/try-it-on/tree/main/packages/web), which re-export this package. Use core directly for tooling (validating a product catalog in CI, building manifests in a CMS) or a custom renderer.
 
 ## Validate manifests
 
@@ -31,6 +31,17 @@ for (const file of process.argv.slice(2)) {
   }
 }
 ```
+
+### From the command line
+
+The package includes `tryonit-validate`, which checks manifests and the GLB and PNG files they reference (existence, real file type, size, transparency):
+
+```bash
+npx -p @tryonit/core tryonit-validate public/tryon             # a folder
+npx -p @tryonit/core tryonit-validate public/tryon/aviator.json
+```
+
+It exits with code 1 when something is wrong, so it fits in CI. How to create every kind of product: [Creating products and filters](https://github.com/ArbabNaseer82/try-it-on/blob/main/docs/CREATING_PRODUCTS.md).
 
 The JSON Schema ships as `@tryonit/core/manifest.v1.schema.json` for editor autocomplete.
 

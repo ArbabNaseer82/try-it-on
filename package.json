@@ -25,7 +25,11 @@
     "setup:examples": "pnpm build && pnpm fetch-models && pnpm generate-assets",
     "dev": "pnpm --filter playground dev",
     "verify": "pnpm lint && pnpm typecheck && pnpm test && pnpm build && pnpm size",
-    "typecheck:examples": "pnpm -r --filter \"./examples/*\" typecheck"
+    "typecheck:examples": "pnpm -r --filter \"./examples/*\" typecheck",
+    "release:check": "pnpm verify && pnpm publint && pnpm attw && pnpm -r --filter \"./packages/*\" exec pnpm pack --dry-run",
+    "release:publish": "pnpm -r --filter \"./packages/*\" publish --access public",
+    "version:set": "node scripts/set-version.mjs",
+    "validate-assets": "node packages/core/bin/tryonit-validate.mjs"
   },
   "devDependencies": {
     "@arethetypeswrong/cli": "0.18.5",

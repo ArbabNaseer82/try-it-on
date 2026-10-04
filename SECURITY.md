@@ -8,7 +8,7 @@
 
 ## Reporting a vulnerability
 
-Please do **not** open a public issue for security problems. Email the maintainer at **SECURITY_CONTACT_EMAIL (replace before publishing)** (or use GitHub private vulnerability reporting once the repository is public) with:
+Please do **not** open a public issue for security problems. Report privately through GitHub: [https://github.com/ArbabNaseer82/try-it-on/security/advisories/new](https://github.com/ArbabNaseer82/try-it-on/security/advisories/new). Include:
 
 - a description of the issue and its impact,
 - steps to reproduce or a proof of concept,

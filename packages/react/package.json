@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "description": "React components and hooks for TryOnIt, the free open-source virtual try-on SDK. Drop-in <TryOnButton> for e-commerce product pages: virtual makeup, glasses, hats, jewelry, watches and clothing. Works with Next.js, Remix and Vite. Fully themeable and headless.",
   "license": "MIT",
-  "author": "TryOnIt contributors",
+  "author": "arbab-naseer (https://github.com/ArbabNaseer82)",
   "type": "module",
   "sideEffects": [
     "**/*.css"
@@ -27,14 +27,14 @@
     "mediapipe",
     "webgl"
   ],
-  "homepage": "https://github.com/OWNER/tryonit/tree/main/packages/react#readme",
+  "homepage": "https://github.com/ArbabNaseer82/try-it-on/tree/main/packages/react#readme",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/OWNER/tryonit.git",
+    "url": "git+https://github.com/ArbabNaseer82/try-it-on.git",
     "directory": "packages/react"
   },
   "bugs": {
-    "url": "https://github.com/OWNER/tryonit/issues"
+    "url": "https://github.com/ArbabNaseer82/try-it-on/issues"
   },
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
@@ -68,7 +68,8 @@
     "build": "tsdown && node ../../scripts/copy-file.mjs src/styles/tryonit.css dist/tryonit.css && node ../../scripts/copy-file.mjs ../../LICENSE LICENSE",
     "typecheck": "tsc -p tsconfig.test.json",
     "test": "vitest run",
-    "test:watch": "vitest"
+    "test:watch": "vitest",
+    "prepublishOnly": "pnpm run build && node ../../scripts/prepublish-check.mjs"
   },
   "dependencies": {
     "@tryonit/core": "workspace:^",

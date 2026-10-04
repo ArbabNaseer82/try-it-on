@@ -77,6 +77,7 @@ export class Overlay2DRenderer implements Renderer {
           scale: asset.scale ?? 1,
           offset: asset.offset ?? [0, 0],
           imageAspect: this.imageSize[0] / this.imageSize[1],
+          mirrored: frame.mirrored,
           frameWidth: frame.width,
           frameHeight: frame.height,
         }),

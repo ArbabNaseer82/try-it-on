@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "description": "Client-side virtual try-on engine for the browser: real-time makeup, glasses, hats, earrings, watches, rings, hair color and clothing overlays using MediaPipe and WebGL. Framework-free mount() for Vue, Svelte, Angular and plain HTML.",
   "license": "MIT",
-  "author": "TryOnIt contributors",
+  "author": "arbab-naseer (https://github.com/ArbabNaseer82)",
   "type": "module",
   "sideEffects": false,
   "keywords": [
@@ -25,14 +25,14 @@
     "svelte",
     "angular"
   ],
-  "homepage": "https://github.com/OWNER/tryonit/tree/main/packages/web#readme",
+  "homepage": "https://github.com/ArbabNaseer82/try-it-on/tree/main/packages/web#readme",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/OWNER/tryonit.git",
+    "url": "git+https://github.com/ArbabNaseer82/try-it-on.git",
     "directory": "packages/web"
   },
   "bugs": {
-    "url": "https://github.com/OWNER/tryonit/issues"
+    "url": "https://github.com/ArbabNaseer82/try-it-on/issues"
   },
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
@@ -66,7 +66,8 @@
     "build": "tsdown && node ../../scripts/copy-file.mjs src/mount/mount.css dist/tryonit-web.css && node ../../scripts/copy-file.mjs ../../LICENSE LICENSE",
     "typecheck": "tsc -p tsconfig.test.json",
     "test": "vitest run",
-    "test:watch": "vitest"
+    "test:watch": "vitest",
+    "prepublishOnly": "pnpm run build && node ../../scripts/prepublish-check.mjs"
   },
   "dependencies": {
     "@mediapipe/tasks-vision": "^1.0.1",

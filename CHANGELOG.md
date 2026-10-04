@@ -13,6 +13,8 @@ All notable changes to this project are documented here. The format follows [Kee
 - `@tryonit/react`: `TryOnProvider`, `TryOn`, `TryOnButton`, `TryOnModal`, `TryOnView`, product switcher, shade swatches, capture, camera switch, compare slider, intensity slider, status overlay, permission prompt, headless hooks, theme to CSS variables, icons, labels, `unstyled` and `slots`.
 - Examples: Vite playground, Next.js App Router, React Router v7 (Remix), vanilla HTML.
 - Procedural sample assets, model fetch script, documentation.
+- `tryonit-validate` command line tool in `@tryonit/core` for checking manifests and their GLB and PNG files.
+- Guide for creating products and filters (`docs/CREATING_PRODUCTS.md`) and a publishing guide (`docs/PUBLISHING.md`).
 
 ### Experimental
 

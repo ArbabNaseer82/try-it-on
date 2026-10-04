@@ -330,6 +330,7 @@ export function createTryOnEngine(options: TryOnEngineOptions = {}): TryOnEngine
         source: src.element,
         sourceVersion,
         intensity: store.getState().intensity,
+        mirrored: store.getState().camera.mirrored,
         ...pipeline.snapshot(now),
       };
       try {

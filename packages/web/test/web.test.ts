@@ -161,6 +161,24 @@ describe('overlay geometry', () => {
     expect((Math.max(...ys) - Math.min(...ys)) * 500).toBeCloseTo(150, 0);
   });
 
+  it('mirrored stickers flip texture and horizontal offset so artwork reads correctly', () => {
+    const anchor = { x: 0.5, y: 0.5, angle: 0, size: 0.3 };
+    const base = {
+      scale: 1,
+      offset: [0.2, 0] as [number, number],
+      imageAspect: 1,
+      frameWidth: 1000,
+      frameHeight: 1000,
+    };
+    const normal = stickerQuad(anchor, base);
+    const mirrored = stickerQuad(anchor, { ...base, mirrored: true });
+    expect(normal.uvs[0]).toBe(0);
+    expect(mirrored.uvs[0]).toBe(1);
+    const centerX = (q: { positions: Float32Array }) => (q.positions[0]! + q.positions[2]!) / 2;
+    expect(centerX(normal)).toBeCloseTo(0.56);
+    expect(centerX(mirrored)).toBeCloseTo(0.44);
+  });
+
   it('garment mesh maps anchors onto the torso', () => {
     const mesh = garmentMesh(
       {
