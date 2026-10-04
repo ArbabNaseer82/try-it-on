@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>TryOnIt vanilla HTML example</title>
+    <style>
+      body {
+        margin: 0;
+        font-family: system-ui, sans-serif;
+        background: #f8fafc;
+      }
+      main {
+        max-width: 760px;
+        margin: 0 auto;
+        padding: 16px;
+      }
+      #tryon {
+        height: 70vh;
+      }
+      .products {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+        margin: 12px 0;
+      }
+      .products button {
+        padding: 8px 14px;
+        border-radius: 999px;
+        border: 1px solid #cbd5e1;
+        background: #fff;
+        cursor: pointer;
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <h1>Virtual try-on with plain HTML</h1>
+      <p>No framework: <code>mount()</code> from <code>@tryonit/web</code> builds the whole UI.</p>
+      <div class="products">
+        <button data-asset="/assets/glasses-aviator.json">Aviator</button>
+        <button data-asset="/assets/lipstick.json">Lipstick</button>
+        <button data-asset="/assets/earrings.json">Earrings</button>
+        <button data-asset="/assets/moustache.json">Moustache</button>
+      </div>
+      <div id="tryon"></div>
+    </main>
+    <script type="module">
+      import { mount } from '@tryonit/web';
+      import '@tryonit/web/styles.css';
+
+      const handle = mount(document.getElementById('tryon'), {
+        asset: '/assets/glasses-aviator.json',
+        modelBaseUrl: '/models',
+        wasmBaseUrl: '/wasm',
+        theme: { 'color-primary': '#0f766e' },
+        onCapture: (blob) => window.open(URL.createObjectURL(blob), '_blank'),
+      });
+
+      document.querySelectorAll('[data-asset]').forEach((button) => {
+        button.addEventListener('click', () => handle.setAsset(button.dataset.asset));
+      });
+    </script>
+  </body>
+</html>

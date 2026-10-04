@@ -1,0 +1,14 @@
+dist
+coverage
+node_modules
+pnpm-lock.yaml
+examples/*/public/models
+examples/*/public/wasm
+examples/*/public/assets
+examples/nextjs-app/.next
+examples/remix-app/build
+examples/remix-app/.react-router
+playwright-report
+test-results
+.cache
+examples/nextjs-app/next-env.d.ts

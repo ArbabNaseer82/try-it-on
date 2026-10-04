@@ -1,0 +1,1527 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://unpkg.com/@tryonit/core/dist/manifest.v1.schema.json",
+  "title": "TryOnIt asset manifest v1",
+  "description": "Describes one virtual try-on product (makeup, glasses, hat, earrings, watch, ring, hair color, 2D overlay or clothing). See docs/MANIFEST_SPEC.md.",
+  "oneOf": [
+    {
+      "title": "makeup.lips",
+      "description": "Lipstick or lip gloss.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["version", "id", "type", "color"],
+      "properties": {
+        "$schema": {
+          "type": "string"
+        },
+        "version": {
+          "const": 1
+        },
+        "id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200
+        },
+        "name": {
+          "type": "string",
+          "maxLength": 200
+        },
+        "thumbnail": {
+          "$ref": "#/$defs/url"
+        },
+        "defaultVariantId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "meta": {
+          "type": "object",
+          "description": "Merchant data passthrough (sku, price). Never interpreted."
+        },
+        "type": {
+          "const": "makeup.lips"
+        },
+        "variants": {
+          "type": "array",
+          "maxItems": 200,
+          "items": {
+            "$ref": "#/$defs/variant",
+            "properties": {
+              "overrides": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "color": {
+                    "$ref": "#/$defs/color"
+                  },
+                  "opacity": {
+                    "type": "number",
+                    "minimum": 0,
+                    "maximum": 1,
+                    "default": 0.6
+                  },
+                  "finish": {
+                    "enum": ["matte", "gloss", "satin", "shimmer"],
+                    "default": "matte"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "color": {
+          "$ref": "#/$defs/color"
+        },
+        "opacity": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1,
+          "default": 0.6
+        },
+        "finish": {
+          "enum": ["matte", "gloss", "satin", "shimmer"],
+          "default": "matte"
+        }
+      }
+    },
+    {
+      "title": "makeup.blush",
+      "description": "Cheek blush.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["version", "id", "type", "color"],
+      "properties": {
+        "$schema": {
+          "type": "string"
+        },
+        "version": {
+          "const": 1
+        },
+        "id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200
+        },
+        "name": {
+          "type": "string",
+          "maxLength": 200
+        },
+        "thumbnail": {
+          "$ref": "#/$defs/url"
+        },
+        "defaultVariantId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "meta": {
+          "type": "object",
+          "description": "Merchant data passthrough (sku, price). Never interpreted."
+        },
+        "type": {
+          "const": "makeup.blush"
+        },
+        "variants": {
+          "type": "array",
+          "maxItems": 200,
+          "items": {
+            "$ref": "#/$defs/variant",
+            "properties": {
+              "overrides": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "color": {
+                    "$ref": "#/$defs/color"
+                  },
+                  "opacity": {
+                    "type": "number",
+                    "minimum": 0,
+                    "maximum": 1,
+                    "default": 0.35
+                  },
+                  "size": {
+                    "type": "number",
+                    "minimum": 0,
+                    "maximum": 1,
+                    "default": 0.5
+                  }
+                }
+              }
+            }
+          }
+        },
+        "color": {
+          "$ref": "#/$defs/color"
+        },
+        "opacity": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1,
+          "default": 0.35
+        },
+        "size": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1,
+          "default": 0.5
+        }
+      }
+    },
+    {
+      "title": "makeup.eyeshadow",
+      "description": "Eyeshadow on the upper eyelid.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["version", "id", "type", "color"],
+      "properties": {
+        "$schema": {
+          "type": "string"
+        },
+        "version": {
+          "const": 1
+        },
+        "id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200
+        },
+        "name": {
+          "type": "string",
+          "maxLength": 200
+        },
+        "thumbnail": {
+          "$ref": "#/$defs/url"
+        },
+        "defaultVariantId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "meta": {
+          "type": "object",
+          "description": "Merchant data passthrough (sku, price). Never interpreted."
+        },
+        "type": {
+          "const": "makeup.eyeshadow"
+        },
+        "variants": {
+          "type": "array",
+          "maxItems": 200,
+          "items": {
+            "$ref": "#/$defs/variant",
+            "properties": {
+              "overrides": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "color": {
+                    "$ref": "#/$defs/color"
+                  },
+                  "opacity": {
+                    "type": "number",
+                    "minimum": 0,
+                    "maximum": 1,
+                    "default": 0.5
+                  },
+                  "finish": {
+                    "enum": ["matte", "satin", "shimmer"],
+                    "default": "matte"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "color": {
+          "$ref": "#/$defs/color"
+        },
+        "opacity": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1,
+          "default": 0.5
+        },
+        "finish": {
+          "enum": ["matte", "satin", "shimmer"],
+          "default": "matte"
+        }
+      }
+    },
+    {
+      "title": "makeup.eyeliner",
+      "description": "Eyeliner along the upper lash line, optionally winged.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["version", "id", "type", "color"],
+      "properties": {
+        "$schema": {
+          "type": "string"
+        },
+        "version": {
+          "const": 1
+        },
+        "id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200
+        },
+        "name": {
+          "type": "string",
+          "maxLength": 200
+        },
+        "thumbnail": {
+          "$ref": "#/$defs/url"
+        },
+        "defaultVariantId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "meta": {
+          "type": "object",
+          "description": "Merchant data passthrough (sku, price). Never interpreted."
+        },
+        "type": {
+          "const": "makeup.eyeliner"
+        },
+        "variants": {
+          "type": "array",
+          "maxItems": 200,
+          "items": {
+            "$ref": "#/$defs/variant",
+            "properties": {
+              "overrides": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "color": {
+                    "$ref": "#/$defs/color"
+                  },
+                  "opacity": {
+                    "type": "number",
+                    "minimum": 0,
+                    "maximum": 1,
+                    "default": 0.9
+                  },
+                  "thickness": {
+                    "type": "number",
+                    "minimum": 0,
+                    "maximum": 1,
+                    "default": 0.35
+                  },
+                  "wing": {
+                    "type": "boolean",
+                    "default": false
+                  }
+                }
+              }
+            }
+          }
+        },
+        "color": {
+          "$ref": "#/$defs/color"
+        },
+        "opacity": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1,
+          "default": 0.9
+        },
+        "thickness": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1,
+          "default": 0.35
+        },
+        "wing": {
+          "type": "boolean",
+          "default": false
+        }
+      }
+    },
+    {
+      "title": "makeup.brows",
+      "description": "Brow tint.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["version", "id", "type", "color"],
+      "properties": {
+        "$schema": {
+          "type": "string"
+        },
+        "version": {
+          "const": 1
+        },
+        "id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200
+        },
+        "name": {
+          "type": "string",
+          "maxLength": 200
+        },
+        "thumbnail": {
+          "$ref": "#/$defs/url"
+        },
+        "defaultVariantId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "meta": {
+          "type": "object",
+          "description": "Merchant data passthrough (sku, price). Never interpreted."
+        },
+        "type": {
+          "const": "makeup.brows"
+        },
+        "variants": {
+          "type": "array",
+          "maxItems": 200,
+          "items": {
+            "$ref": "#/$defs/variant",
+            "properties": {
+              "overrides": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "color": {
+                    "$ref": "#/$defs/color"
+                  },
+                  "opacity": {
+                    "type": "number",
+                    "minimum": 0,
+                    "maximum": 1,
+                    "default": 0.4
+                  }
+                }
+              }
+            }
+          }
+        },
+        "color": {
+          "$ref": "#/$defs/color"
+        },
+        "opacity": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1,
+          "default": 0.4
+        }
+      }
+    },
+    {
+      "title": "makeup.foundation",
+      "description": "Foundation or skin tint over the face.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["version", "id", "type", "color"],
+      "properties": {
+        "$schema": {
+          "type": "string"
+        },
+        "version": {
+          "const": 1
+        },
+        "id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200
+        },
+        "name": {
+          "type": "string",
+          "maxLength": 200
+        },
+        "thumbnail": {
+          "$ref": "#/$defs/url"
+        },
+        "defaultVariantId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "meta": {
+          "type": "object",
+          "description": "Merchant data passthrough (sku, price). Never interpreted."
+        },
+        "type": {
+          "const": "makeup.foundation"
+        },
+        "variants": {
+          "type": "array",
+          "maxItems": 200,
+          "items": {
+            "$ref": "#/$defs/variant",
+            "properties": {
+              "overrides": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "color": {
+                    "$ref": "#/$defs/color"
+                  },
+                  "opacity": {
+                    "type": "number",
+                    "minimum": 0,
+                    "maximum": 1,
+                    "default": 0.35
+                  },
+                  "coverage": {
+                    "type": "number",
+                    "minimum": 0,
+                    "maximum": 1,
+                    "default": 0.4
+                  }
+                }
+              }
+            }
+          }
+        },
+        "color": {
+          "$ref": "#/$defs/color"
+        },
+        "opacity": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1,
+          "default": 0.35
+        },
+        "coverage": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1,
+          "default": 0.4
+        }
+      }
+    },
+    {
+      "title": "makeup.look",
+      "description": "A complete look made of several makeup layers.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["version", "id", "type", "layers"],
+      "properties": {
+        "$schema": {
+          "type": "string"
+        },
+        "version": {
+          "const": 1
+        },
+        "id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200
+        },
+        "name": {
+          "type": "string",
+          "maxLength": 200
+        },
+        "thumbnail": {
+          "$ref": "#/$defs/url"
+        },
+        "defaultVariantId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "meta": {
+          "type": "object",
+          "description": "Merchant data passthrough (sku, price). Never interpreted."
+        },
+        "type": {
+          "const": "makeup.look"
+        },
+        "variants": {
+          "type": "array",
+          "maxItems": 200,
+          "items": {
+            "$ref": "#/$defs/variant",
+            "properties": {
+              "overrides": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "layers": {
+                    "type": "array",
+                    "minItems": 1,
+                    "maxItems": 12,
+                    "items": {
+                      "$ref": "#/$defs/makeupLayer"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "layers": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 12,
+          "items": {
+            "$ref": "#/$defs/makeupLayer"
+          }
+        }
+      }
+    },
+    {
+      "title": "hair.color",
+      "description": "Hair color using hair segmentation.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["version", "id", "type", "color"],
+      "properties": {
+        "$schema": {
+          "type": "string"
+        },
+        "version": {
+          "const": 1
+        },
+        "id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200
+        },
+        "name": {
+          "type": "string",
+          "maxLength": 200
+        },
+        "thumbnail": {
+          "$ref": "#/$defs/url"
+        },
+        "defaultVariantId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "meta": {
+          "type": "object",
+          "description": "Merchant data passthrough (sku, price). Never interpreted."
+        },
+        "type": {
+          "const": "hair.color"
+        },
+        "variants": {
+          "type": "array",
+          "maxItems": 200,
+          "items": {
+            "$ref": "#/$defs/variant",
+            "properties": {
+              "overrides": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "color": {
+                    "$ref": "#/$defs/color"
+                  },
+                  "opacity": {
+                    "type": "number",
+                    "minimum": 0,
+                    "maximum": 1,
+                    "default": 0.55
+                  }
+                }
+              }
+            }
+          }
+        },
+        "color": {
+          "$ref": "#/$defs/color"
+        },
+        "opacity": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1,
+          "default": 0.55
+        }
+      }
+    },
+    {
+      "title": "glasses",
+      "description": "Glasses or sunglasses (.glb model in millimeters).",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["version", "id", "type", "model"],
+      "properties": {
+        "$schema": {
+          "type": "string"
+        },
+        "version": {
+          "const": 1
+        },
+        "id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200
+        },
+        "name": {
+          "type": "string",
+          "maxLength": 200
+        },
+        "thumbnail": {
+          "$ref": "#/$defs/url"
+        },
+        "defaultVariantId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "meta": {
+          "type": "object",
+          "description": "Merchant data passthrough (sku, price). Never interpreted."
+        },
+        "type": {
+          "const": "glasses"
+        },
+        "variants": {
+          "type": "array",
+          "maxItems": 200,
+          "items": {
+            "$ref": "#/$defs/variant",
+            "properties": {
+              "overrides": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "model": {
+                    "$ref": "#/$defs/url"
+                  },
+                  "transform": {
+                    "$ref": "#/$defs/transform"
+                  },
+                  "occlusion": {
+                    "enum": ["head", "none"],
+                    "default": "head"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "model": {
+          "$ref": "#/$defs/url"
+        },
+        "transform": {
+          "$ref": "#/$defs/transform"
+        },
+        "occlusion": {
+          "enum": ["head", "none"],
+          "default": "head"
+        }
+      }
+    },
+    {
+      "title": "hat",
+      "description": "Hats and caps (.glb model in millimeters).",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["version", "id", "type", "model"],
+      "properties": {
+        "$schema": {
+          "type": "string"
+        },
+        "version": {
+          "const": 1
+        },
+        "id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200
+        },
+        "name": {
+          "type": "string",
+          "maxLength": 200
+        },
+        "thumbnail": {
+          "$ref": "#/$defs/url"
+        },
+        "defaultVariantId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "meta": {
+          "type": "object",
+          "description": "Merchant data passthrough (sku, price). Never interpreted."
+        },
+        "type": {
+          "const": "hat"
+        },
+        "variants": {
+          "type": "array",
+          "maxItems": 200,
+          "items": {
+            "$ref": "#/$defs/variant",
+            "properties": {
+              "overrides": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "model": {
+                    "$ref": "#/$defs/url"
+                  },
+                  "transform": {
+                    "$ref": "#/$defs/transform"
+                  },
+                  "occlusion": {
+                    "enum": ["head", "none"],
+                    "default": "head"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "model": {
+          "$ref": "#/$defs/url"
+        },
+        "transform": {
+          "$ref": "#/$defs/transform"
+        },
+        "occlusion": {
+          "enum": ["head", "none"],
+          "default": "head"
+        }
+      }
+    },
+    {
+      "title": "earrings",
+      "description": "Earrings (.glb model of one earring in millimeters).",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["version", "id", "type", "model"],
+      "properties": {
+        "$schema": {
+          "type": "string"
+        },
+        "version": {
+          "const": 1
+        },
+        "id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200
+        },
+        "name": {
+          "type": "string",
+          "maxLength": 200
+        },
+        "thumbnail": {
+          "$ref": "#/$defs/url"
+        },
+        "defaultVariantId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "meta": {
+          "type": "object",
+          "description": "Merchant data passthrough (sku, price). Never interpreted."
+        },
+        "type": {
+          "const": "earrings"
+        },
+        "variants": {
+          "type": "array",
+          "maxItems": 200,
+          "items": {
+            "$ref": "#/$defs/variant",
+            "properties": {
+              "overrides": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "model": {
+                    "$ref": "#/$defs/url"
+                  },
+                  "transform": {
+                    "$ref": "#/$defs/transform"
+                  },
+                  "side": {
+                    "enum": ["both", "left", "right"],
+                    "default": "both"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "model": {
+          "$ref": "#/$defs/url"
+        },
+        "transform": {
+          "$ref": "#/$defs/transform"
+        },
+        "side": {
+          "enum": ["both", "left", "right"],
+          "default": "both"
+        }
+      }
+    },
+    {
+      "title": "face.overlay2d",
+      "description": "Flat PNG sticker or mask anchored to the face.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["version", "id", "type", "image"],
+      "properties": {
+        "$schema": {
+          "type": "string"
+        },
+        "version": {
+          "const": 1
+        },
+        "id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200
+        },
+        "name": {
+          "type": "string",
+          "maxLength": 200
+        },
+        "thumbnail": {
+          "$ref": "#/$defs/url"
+        },
+        "defaultVariantId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "meta": {
+          "type": "object",
+          "description": "Merchant data passthrough (sku, price). Never interpreted."
+        },
+        "type": {
+          "const": "face.overlay2d"
+        },
+        "variants": {
+          "type": "array",
+          "maxItems": 200,
+          "items": {
+            "$ref": "#/$defs/variant",
+            "properties": {
+              "overrides": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "image": {
+                    "$ref": "#/$defs/url"
+                  },
+                  "anchor": {
+                    "enum": [
+                      "forehead",
+                      "eyes",
+                      "noseBridge",
+                      "noseTip",
+                      "mouth",
+                      "chin",
+                      "leftCheek",
+                      "rightCheek"
+                    ],
+                    "default": "noseBridge"
+                  },
+                  "scale": {
+                    "type": "number",
+                    "minimum": 0.01,
+                    "maximum": 10,
+                    "default": 1
+                  },
+                  "offset": {
+                    "type": "array",
+                    "items": {
+                      "type": "number"
+                    },
+                    "minItems": 2,
+                    "maxItems": 2,
+                    "default": [0, 0]
+                  },
+                  "opacity": {
+                    "type": "number",
+                    "minimum": 0,
+                    "maximum": 1,
+                    "default": 1
+                  }
+                }
+              }
+            }
+          }
+        },
+        "image": {
+          "$ref": "#/$defs/url"
+        },
+        "anchor": {
+          "enum": [
+            "forehead",
+            "eyes",
+            "noseBridge",
+            "noseTip",
+            "mouth",
+            "chin",
+            "leftCheek",
+            "rightCheek"
+          ],
+          "default": "noseBridge"
+        },
+        "scale": {
+          "type": "number",
+          "minimum": 0.01,
+          "maximum": 10,
+          "default": 1
+        },
+        "offset": {
+          "type": "array",
+          "items": {
+            "type": "number"
+          },
+          "minItems": 2,
+          "maxItems": 2,
+          "default": [0, 0]
+        },
+        "opacity": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1,
+          "default": 1
+        }
+      }
+    },
+    {
+      "title": "watch",
+      "description": "Wrist watch or bracelet (.glb model in millimeters).",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["version", "id", "type", "model"],
+      "properties": {
+        "$schema": {
+          "type": "string"
+        },
+        "version": {
+          "const": 1
+        },
+        "id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200
+        },
+        "name": {
+          "type": "string",
+          "maxLength": 200
+        },
+        "thumbnail": {
+          "$ref": "#/$defs/url"
+        },
+        "defaultVariantId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "meta": {
+          "type": "object",
+          "description": "Merchant data passthrough (sku, price). Never interpreted."
+        },
+        "type": {
+          "const": "watch"
+        },
+        "variants": {
+          "type": "array",
+          "maxItems": 200,
+          "items": {
+            "$ref": "#/$defs/variant",
+            "properties": {
+              "overrides": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "model": {
+                    "$ref": "#/$defs/url"
+                  },
+                  "transform": {
+                    "$ref": "#/$defs/transform"
+                  },
+                  "wristWidthMm": {
+                    "type": "number",
+                    "minimum": 20,
+                    "maximum": 150,
+                    "default": 60
+                  }
+                }
+              }
+            }
+          }
+        },
+        "model": {
+          "$ref": "#/$defs/url"
+        },
+        "transform": {
+          "$ref": "#/$defs/transform"
+        },
+        "wristWidthMm": {
+          "type": "number",
+          "minimum": 20,
+          "maximum": 150,
+          "default": 60
+        }
+      }
+    },
+    {
+      "title": "ring",
+      "description": "Finger ring (.glb model in millimeters).",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["version", "id", "type", "model"],
+      "properties": {
+        "$schema": {
+          "type": "string"
+        },
+        "version": {
+          "const": 1
+        },
+        "id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200
+        },
+        "name": {
+          "type": "string",
+          "maxLength": 200
+        },
+        "thumbnail": {
+          "$ref": "#/$defs/url"
+        },
+        "defaultVariantId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "meta": {
+          "type": "object",
+          "description": "Merchant data passthrough (sku, price). Never interpreted."
+        },
+        "type": {
+          "const": "ring"
+        },
+        "variants": {
+          "type": "array",
+          "maxItems": 200,
+          "items": {
+            "$ref": "#/$defs/variant",
+            "properties": {
+              "overrides": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "model": {
+                    "$ref": "#/$defs/url"
+                  },
+                  "transform": {
+                    "$ref": "#/$defs/transform"
+                  },
+                  "finger": {
+                    "enum": ["index", "middle", "ring", "pinky"],
+                    "default": "ring"
+                  },
+                  "sizeMm": {
+                    "type": "number",
+                    "minimum": 8,
+                    "maximum": 40,
+                    "default": 18
+                  }
+                }
+              }
+            }
+          }
+        },
+        "model": {
+          "$ref": "#/$defs/url"
+        },
+        "transform": {
+          "$ref": "#/$defs/transform"
+        },
+        "finger": {
+          "enum": ["index", "middle", "ring", "pinky"],
+          "default": "ring"
+        },
+        "sizeMm": {
+          "type": "number",
+          "minimum": 8,
+          "maximum": 40,
+          "default": 18
+        }
+      }
+    },
+    {
+      "title": "clothing.top",
+      "description": "EXPERIMENTAL. Front facing garment PNG warped onto the torso.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["version", "id", "type", "image", "anchors"],
+      "properties": {
+        "$schema": {
+          "type": "string"
+        },
+        "version": {
+          "const": 1
+        },
+        "id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200
+        },
+        "name": {
+          "type": "string",
+          "maxLength": 200
+        },
+        "thumbnail": {
+          "$ref": "#/$defs/url"
+        },
+        "defaultVariantId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "meta": {
+          "type": "object",
+          "description": "Merchant data passthrough (sku, price). Never interpreted."
+        },
+        "type": {
+          "const": "clothing.top"
+        },
+        "variants": {
+          "type": "array",
+          "maxItems": 200,
+          "items": {
+            "$ref": "#/$defs/variant",
+            "properties": {
+              "overrides": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "image": {
+                    "$ref": "#/$defs/url"
+                  },
+                  "anchors": {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "required": ["leftShoulder", "rightShoulder", "leftHip", "rightHip"],
+                    "properties": {
+                      "leftShoulder": {
+                        "type": "array",
+                        "items": {
+                          "type": "number"
+                        },
+                        "minItems": 2,
+                        "maxItems": 2
+                      },
+                      "rightShoulder": {
+                        "type": "array",
+                        "items": {
+                          "type": "number"
+                        },
+                        "minItems": 2,
+                        "maxItems": 2
+                      },
+                      "leftHip": {
+                        "type": "array",
+                        "items": {
+                          "type": "number"
+                        },
+                        "minItems": 2,
+                        "maxItems": 2
+                      },
+                      "rightHip": {
+                        "type": "array",
+                        "items": {
+                          "type": "number"
+                        },
+                        "minItems": 2,
+                        "maxItems": 2
+                      }
+                    }
+                  },
+                  "padding": {
+                    "type": "number",
+                    "minimum": 0.5,
+                    "maximum": 3,
+                    "default": 1.15
+                  },
+                  "opacity": {
+                    "type": "number",
+                    "minimum": 0,
+                    "maximum": 1,
+                    "default": 1
+                  }
+                }
+              }
+            }
+          }
+        },
+        "image": {
+          "$ref": "#/$defs/url"
+        },
+        "anchors": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["leftShoulder", "rightShoulder", "leftHip", "rightHip"],
+          "properties": {
+            "leftShoulder": {
+              "type": "array",
+              "items": {
+                "type": "number"
+              },
+              "minItems": 2,
+              "maxItems": 2
+            },
+            "rightShoulder": {
+              "type": "array",
+              "items": {
+                "type": "number"
+              },
+              "minItems": 2,
+              "maxItems": 2
+            },
+            "leftHip": {
+              "type": "array",
+              "items": {
+                "type": "number"
+              },
+              "minItems": 2,
+              "maxItems": 2
+            },
+            "rightHip": {
+              "type": "array",
+              "items": {
+                "type": "number"
+              },
+              "minItems": 2,
+              "maxItems": 2
+            }
+          }
+        },
+        "padding": {
+          "type": "number",
+          "minimum": 0.5,
+          "maximum": 3,
+          "default": 1.15
+        },
+        "opacity": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1,
+          "default": 1
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "color": {
+      "type": "string",
+      "description": "#RGB, #RGBA, #RRGGBB, #RRGGBBAA, rgb() or rgba()",
+      "pattern": "^(?:#(?:[0-9a-fA-F]{3}|[0-9a-fA-F]{4}|[0-9a-fA-F]{6}|[0-9a-fA-F]{8})|rgba?\\(.*\\))$"
+    },
+    "url": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 4096,
+      "description": "Absolute http(s), data or blob URL, or a path relative to the manifest."
+    },
+    "transform": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Offset in anchor space. Position in millimeters, rotation in degrees.",
+      "properties": {
+        "position": {
+          "type": "array",
+          "items": {
+            "type": "number"
+          },
+          "minItems": 3,
+          "maxItems": 3
+        },
+        "rotation": {
+          "type": "array",
+          "items": {
+            "type": "number"
+          },
+          "minItems": 3,
+          "maxItems": 3
+        },
+        "scale": {
+          "oneOf": [
+            {
+              "type": "number",
+              "minimum": 0
+            },
+            {
+              "type": "array",
+              "items": {
+                "type": "number"
+              },
+              "minItems": 3,
+              "maxItems": 3
+            }
+          ]
+        }
+      }
+    },
+    "variant": {
+      "type": "object",
+      "required": ["id"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200
+        },
+        "name": {
+          "type": "string",
+          "maxLength": 200
+        },
+        "swatch": {
+          "$ref": "#/$defs/color"
+        },
+        "thumbnail": {
+          "$ref": "#/$defs/url"
+        },
+        "overrides": {
+          "type": "object"
+        }
+      }
+    },
+    "makeupLayer": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["type", "color"],
+          "properties": {
+            "type": {
+              "const": "makeup.lips"
+            },
+            "color": {
+              "$ref": "#/$defs/color"
+            },
+            "opacity": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1,
+              "default": 0.6
+            },
+            "finish": {
+              "enum": ["matte", "gloss", "satin", "shimmer"],
+              "default": "matte"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["type", "color"],
+          "properties": {
+            "type": {
+              "const": "makeup.blush"
+            },
+            "color": {
+              "$ref": "#/$defs/color"
+            },
+            "opacity": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1,
+              "default": 0.35
+            },
+            "size": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1,
+              "default": 0.5
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["type", "color"],
+          "properties": {
+            "type": {
+              "const": "makeup.eyeshadow"
+            },
+            "color": {
+              "$ref": "#/$defs/color"
+            },
+            "opacity": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1,
+              "default": 0.5
+            },
+            "finish": {
+              "enum": ["matte", "satin", "shimmer"],
+              "default": "matte"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["type", "color"],
+          "properties": {
+            "type": {
+              "const": "makeup.eyeliner"
+            },
+            "color": {
+              "$ref": "#/$defs/color"
+            },
+            "opacity": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1,
+              "default": 0.9
+            },
+            "thickness": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1,
+              "default": 0.35
+            },
+            "wing": {
+              "type": "boolean",
+              "default": false
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["type", "color"],
+          "properties": {
+            "type": {
+              "const": "makeup.brows"
+            },
+            "color": {
+              "$ref": "#/$defs/color"
+            },
+            "opacity": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1,
+              "default": 0.4
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["type", "color"],
+          "properties": {
+            "type": {
+              "const": "makeup.foundation"
+            },
+            "color": {
+              "$ref": "#/$defs/color"
+            },
+            "opacity": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1,
+              "default": 0.35
+            },
+            "coverage": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1,
+              "default": 0.4
+            }
+          }
+        }
+      ]
+    }
+  }
+}

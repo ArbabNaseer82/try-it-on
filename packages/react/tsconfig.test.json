@@ -1,0 +1,13 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "lib": ["ES2022", "DOM", "DOM.Iterable"],
+    "jsx": "react-jsx",
+    "types": ["node"],
+    "paths": {
+      "@tryonit/core": ["../core/src/index.ts"],
+      "@tryonit/web": ["../web/src/index.ts"]
+    }
+  },
+  "include": ["src", "test", "vitest.config.ts", "tsdown.config.ts"]
+}

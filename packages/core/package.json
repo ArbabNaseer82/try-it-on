@@ -1,0 +1,73 @@
+{
+  "name": "@tryonit/core",
+  "version": "0.1.0",
+  "description": "Platform-agnostic core of TryOnIt, the open-source virtual try-on SDK: asset manifest validation, state store, face/hand/body anchor math and smoothing filters. Zero dependencies, no DOM.",
+  "license": "MIT",
+  "author": "TryOnIt contributors",
+  "type": "module",
+  "sideEffects": false,
+  "keywords": [
+    "virtual-try-on",
+    "try-on",
+    "ar",
+    "augmented-reality",
+    "face-tracking",
+    "hand-tracking",
+    "mediapipe",
+    "ecommerce",
+    "makeup",
+    "glasses",
+    "react-native",
+    "typescript",
+    "zero-dependency"
+  ],
+  "homepage": "https://github.com/OWNER/tryonit/tree/main/packages/core#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/OWNER/tryonit.git",
+    "directory": "packages/core"
+  },
+  "bugs": {
+    "url": "https://github.com/OWNER/tryonit/issues"
+  },
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      },
+      "require": {
+        "types": "./dist/index.d.cts",
+        "default": "./dist/index.cjs"
+      }
+    },
+    "./manifest.v1.schema.json": "./dist/manifest.v1.schema.json",
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "build": "tsdown && node ../../scripts/copy-file.mjs ../../schema/manifest.v1.schema.json dist/manifest.v1.schema.json && node ../../scripts/copy-file.mjs ../../LICENSE LICENSE",
+    "typecheck": "tsc -p tsconfig.json && tsc -p tsconfig.test.json",
+    "test": "vitest run --coverage",
+    "test:watch": "vitest"
+  },
+  "devDependencies": {
+    "@vitest/coverage-v8": "5.0.3",
+    "tsdown": "0.23.0",
+    "typescript": "5.9.3",
+    "vitest": "5.0.3"
+  }
+}
