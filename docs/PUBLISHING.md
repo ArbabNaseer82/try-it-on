@@ -1,21 +1,23 @@
 # Publishing to npm
 
-This is the maintainer checklist for releasing `@tryonit/core`, `@tryonit/web` and `@tryonit/react` from the npm account [arbab-naseer](https://www.npmjs.com/~arbab-naseer).
+This is the maintainer checklist for releasing `@tryonit/core`, `@tryonit/web`, `@tryonit/react` and `@tryonit/react-native` from the npm account [arbab-naseer](https://www.npmjs.com/~arbab-naseer).
 
 ## What gets published (and what never does)
 
 You never upload folders by hand. Each package is published from its own folder, and its `files` list in `package.json` is a whitelist: only those paths go into the tarball.
 
-| Folder you publish from | npm package      | Contents of the tarball                                                                                                         |
-| ----------------------- | ---------------- | ------------------------------------------------------------------------------------------------------------------------------- |
-| `packages/core`         | `@tryonit/core`  | `dist/` (JS, types, source maps, `manifest.v1.schema.json`), `bin/tryonit-validate.mjs`, `README.md`, `LICENSE`, `package.json` |
-| `packages/web`          | `@tryonit/web`   | `dist/` (JS entry plus lazy chunks, types, source maps, `tryonit-web.css`), `README.md`, `LICENSE`, `package.json`              |
-| `packages/react`        | `@tryonit/react` | `dist/` (JS, types, source maps, `tryonit.css`), `README.md`, `LICENSE`, `package.json`                                         |
+| Folder you publish from | npm package             | Contents of the tarball                                                                                                                                  |
+| ----------------------- | ----------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `packages/core`         | `@tryonit/core`         | `dist/` (JS, types, source maps, `manifest.v1.schema.json`), `bin/tryonit-validate.mjs`, `README.md`, `LICENSE`, `package.json`                          |
+| `packages/web`          | `@tryonit/web`          | `dist/` (JS entry plus lazy chunks, types, source maps, `tryonit-web.css`), `README.md`, `LICENSE`, `package.json`                                       |
+| `packages/react`        | `@tryonit/react`        | `dist/` (JS, types, source maps, `tryonit.css`), `README.md`, `LICENSE`, `package.json`                                                                  |
+| `packages/react-native` | `@tryonit/react-native` | `dist/` (JS with the embedded WebView engine, types), `app.plugin.js` and `app.plugin.d.ts` (Expo config plugin), `README.md`, `LICENSE`, `package.json` |
 
 **Never published**, by design:
 
 - The repository root (`package.json` has `"private": true`), so `docs/`, `scripts/`, `schema/`, `e2e/`, `.github/`, configs and the lockfile stay on GitHub only.
-- Every app in `examples/` (all marked `"private": true`), including downloaded models and generated sample assets.
+- Every app in `examples/` (all marked `"private": true`, including the Expo app), downloaded models and generated sample assets.
+- `samples/` (served from GitHub by jsDelivr for demos, not part of any package).
 - Inside each package: `src/`, `test/`, `tsconfig*.json`, `tsdown.config.ts`, `vitest.config.ts`, `coverage/` (not in `files`).
 
 Preview the exact contents at any time:
@@ -45,7 +47,7 @@ pnpm -r --filter "./packages/*" exec pnpm pack --dry-run
 
 ## Release steps
 
-1. **Set the version** (all three packages share one version):
+1. **Set the version** (all packages share one version):
 
    ```bash
    pnpm version:set 0.1.0     # already 0.1.0 for the first release
@@ -69,7 +71,7 @@ pnpm -r --filter "./packages/*" exec pnpm pack --dry-run
    git push origin main
    ```
 
-5. **Publish** all three packages in dependency order (core, web, react):
+5. **Publish** every package in dependency order (core, web, react, react-native). Versions already on npm are skipped, so a first release of `@tryonit/react-native` next to existing 0.1.0 packages publishes only the new package:
 
    ```bash
    pnpm release:publish
@@ -83,6 +85,7 @@ pnpm -r --filter "./packages/*" exec pnpm pack --dry-run
    cd packages/core  && pnpm publish --access public
    cd ../web         && pnpm publish --access public
    cd ../react       && pnpm publish --access public
+   cd ../react-native && pnpm publish --access public
    ```
 
 6. **Tag the release**:
@@ -127,7 +130,7 @@ Also check:
 | New features, backward compatible | minor: `0.1.1` to `0.2.0`           |
 | Breaking changes                  | minor while on 0.x, major after 1.0 |
 
-Repeat the release steps. Always release all three packages together with the same version so their `^` ranges stay aligned.
+Repeat the release steps. Always release all packages together with the same version so their `^` ranges stay aligned.
 
 ## Fixing a bad release
 

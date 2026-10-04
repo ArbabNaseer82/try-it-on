@@ -1,0 +1,24 @@
+{
+  "expo": {
+    "name": "TryOnIt Expo",
+    "slug": "tryonit-expo",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "automatic",
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "dev.tryonit.example"
+    },
+    "android": {
+      "package": "dev.tryonit.example"
+    },
+    "plugins": [
+      [
+        "@tryonit/react-native",
+        {
+          "cameraPermission": "Allow $(PRODUCT_NAME) to use the camera so you can try products on."
+        }
+      ]
+    ]
+  }
+}

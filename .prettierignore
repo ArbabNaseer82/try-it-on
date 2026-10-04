@@ -12,3 +12,6 @@ playwright-report
 test-results
 .cache
 examples/nextjs-app/next-env.d.ts
+packages/react-native/src/generated/runtime.js
+examples/expo-app/.expo
+samples

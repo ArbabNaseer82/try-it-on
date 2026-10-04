@@ -1,0 +1,102 @@
+{
+  "name": "@tryonit/react-native",
+  "version": "0.1.0",
+  "description": "Virtual try-on for React Native and Expo (Expo Go, dev builds and bare apps): makeup, beauty filters, face stickers, glasses, hats, earrings, watches, rings and hair color on the phone camera. Same asset manifests as TryOnIt for the web. Free, open source, on device.",
+  "license": "MIT",
+  "author": "arbab-naseer (https://github.com/ArbabNaseer82)",
+  "type": "commonjs",
+  "sideEffects": false,
+  "keywords": [
+    "react-native",
+    "expo",
+    "expo-go",
+    "virtual-try-on",
+    "try-on",
+    "ar",
+    "augmented-reality",
+    "camera",
+    "face-filter",
+    "beauty-filter",
+    "virtual-makeup",
+    "glasses-try-on",
+    "jewelry-try-on",
+    "face-tracking",
+    "mediapipe",
+    "webview",
+    "ecommerce",
+    "shopify"
+  ],
+  "homepage": "https://github.com/ArbabNaseer82/try-it-on/tree/main/packages/react-native#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ArbabNaseer82/try-it-on.git",
+    "directory": "packages/react-native"
+  },
+  "bugs": {
+    "url": "https://github.com/ArbabNaseer82/try-it-on/issues"
+  },
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "react-native": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "react-native": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      },
+      "import": {
+        "types": "./dist/index.d.mts",
+        "default": "./dist/index.mjs"
+      },
+      "require": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      }
+    },
+    "./app.plugin.js": {
+      "types": "./app.plugin.d.ts",
+      "default": "./app.plugin.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist",
+    "app.plugin.js",
+    "app.plugin.d.ts",
+    "README.md",
+    "LICENSE"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "build:runtime": "node scripts/build-runtime.mjs",
+    "build": "node scripts/build-runtime.mjs && tsdown && node ../../scripts/copy-file.mjs ../../LICENSE LICENSE",
+    "typecheck": "tsc -p tsconfig.json && tsc -p tsconfig.test.json && tsc -p runtime/tsconfig.json",
+    "test": "node scripts/build-runtime.mjs && vitest run",
+    "prepublishOnly": "pnpm run build && node ../../scripts/prepublish-check.mjs"
+  },
+  "dependencies": {
+    "@tryonit/core": "workspace:^"
+  },
+  "peerDependencies": {
+    "react": ">=18.2.0",
+    "react-native": ">=0.73.0",
+    "react-native-webview": ">=13.0.0"
+  },
+  "devDependencies": {
+    "@tryonit/web": "workspace:^",
+    "@types/react": "19.2.18",
+    "react": "19.2.3",
+    "react-native": "0.86.3",
+    "react-native-webview": "13.16.1",
+    "rolldown": "1.2.12",
+    "tsdown": "0.23.0",
+    "typescript": "5.9.3",
+    "vitest": "5.0.3"
+  }
+}

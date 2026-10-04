@@ -21,15 +21,27 @@ Re-run `pnpm build` after changing package sources (or run `pnpm --filter "./pac
 
 ## Running each example
 
-| Example                   | Command                          | URL                              |
-| ------------------------- | -------------------------------- | -------------------------------- |
-| Playground (Vite + React) | `pnpm --filter playground dev`   | http://localhost:5173            |
-| Headless demo             | same                             | http://localhost:5173/#/headless |
-| Next.js App Router        | `pnpm --filter nextjs-app dev`   | http://localhost:3000            |
-| React Router v7 (Remix)   | `pnpm --filter remix-app dev`    | http://localhost:5173            |
-| Vanilla HTML (`mount()`)  | `pnpm --filter vanilla-html dev` | http://localhost:5173            |
+| Example                   | Command                                      | URL                              |
+| ------------------------- | -------------------------------------------- | -------------------------------- |
+| Playground (Vite + React) | `pnpm --filter playground dev`               | http://localhost:5173            |
+| Headless demo             | same                                         | http://localhost:5173/#/headless |
+| Next.js App Router        | `pnpm --filter nextjs-app dev`               | http://localhost:3000            |
+| React Router v7 (Remix)   | `pnpm --filter remix-app dev`                | http://localhost:5173            |
+| Vanilla HTML (`mount()`)  | `pnpm --filter vanilla-html dev`             | http://localhost:5173            |
+| Expo / React Native       | `pnpm build && pnpm --filter expo-app start` | scan the QR code with Expo Go    |
 
 Playground URL parameters: `?asset=glasses-aviator` preselects a sample, `?layout=modal` starts in modal layout.
+
+## Testing the React Native package
+
+`examples/expo-app` uses `@tryonit/react-native` from the workspace and the hosted samples in `samples/` (served by jsDelivr once the repository is public).
+
+```bash
+pnpm build                          # builds every package, including the embedded WebView engine
+pnpm --filter expo-app start        # then scan the QR code with Expo Go on your phone
+```
+
+For a development build: `cd examples/expo-app && npx expo run:ios` (or `run:android`). The config plugin in `app.json` adds the camera permissions. The WebView page itself is covered by `e2e/react-native-runtime.spec.ts`.
 
 ## Testing on a phone over LAN (HTTPS)
 

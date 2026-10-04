@@ -31,6 +31,11 @@ jobs:
       - run: pnpm attw
       - name: Build examples
         run: pnpm --filter "./examples/*" build
+      - name: Bundle the Expo example with Metro (iOS and Android)
+        run: pnpm bundle:expo
+        env:
+          EXPO_NO_TELEMETRY: '1'
+          CI: '1'
 
   e2e:
     runs-on: ubuntu-latest

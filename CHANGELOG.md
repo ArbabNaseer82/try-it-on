@@ -4,6 +4,12 @@ All notable changes to this project are documented here. The format follows [Kee
 
 ## [Unreleased]
 
+### Added
+
+- `@tryonit/react-native`: `TryOnButton`, `TryOnModal`, `TryOnView` and `useTryOn` for Expo Go, Expo dev builds and bare React Native, running the TryOnIt engine in `react-native-webview` with a typed message bridge, photo capture as data URL and base64, theme and labels, self hosting options, and an Expo config plugin for camera permissions.
+- `examples/expo-app`: Expo SDK 57 demo with a product list and a custom UI screen.
+- `samples/`: hosted sample products (served by jsDelivr) for mobile demos.
+
 ## [0.1.0] - not yet published
 
 ### Added

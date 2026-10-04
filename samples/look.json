@@ -1,0 +1,36 @@
+{
+  "$schema": "https://unpkg.com/@tryonit/core/dist/manifest.v1.schema.json",
+  "version": 1,
+  "id": "look-evening",
+  "type": "makeup.look",
+  "name": "Evening Look",
+  "thumbnail": "thumbs/look.svg",
+  "layers": [
+    {
+      "type": "makeup.foundation",
+      "color": "#D9A98A",
+      "opacity": 0.25
+    },
+    {
+      "type": "makeup.blush",
+      "color": "#D9707A",
+      "opacity": 0.3
+    },
+    {
+      "type": "makeup.eyeshadow",
+      "color": "#6D4C7D",
+      "opacity": 0.45,
+      "finish": "shimmer"
+    },
+    {
+      "type": "makeup.eyeliner",
+      "color": "#111111",
+      "wing": true
+    },
+    {
+      "type": "makeup.lips",
+      "color": "#9E1030",
+      "finish": "gloss"
+    }
+  ]
+}

@@ -1,0 +1,34 @@
+{
+  "$schema": "https://unpkg.com/@tryonit/core/dist/manifest.v1.schema.json",
+  "version": 1,
+  "id": "hair-color",
+  "type": "hair.color",
+  "name": "Hair Color",
+  "color": "#7A2E1E",
+  "variants": [
+    {
+      "id": "auburn",
+      "name": "Auburn",
+      "swatch": "#7A2E1E",
+      "overrides": {
+        "color": "#7A2E1E"
+      }
+    },
+    {
+      "id": "honey",
+      "name": "Honey Blonde",
+      "swatch": "#C59A55",
+      "overrides": {
+        "color": "#C59A55"
+      }
+    },
+    {
+      "id": "violet",
+      "name": "Violet",
+      "swatch": "#5B2A86",
+      "overrides": {
+        "color": "#5B2A86"
+      }
+    }
+  ]
+}

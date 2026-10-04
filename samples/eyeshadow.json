@@ -1,0 +1,36 @@
+{
+  "$schema": "https://unpkg.com/@tryonit/core/dist/manifest.v1.schema.json",
+  "version": 1,
+  "id": "eyeshadow-trio",
+  "type": "makeup.eyeshadow",
+  "name": "Eyeshadow Trio",
+  "color": "#6D4C7D",
+  "variants": [
+    {
+      "id": "amethyst",
+      "name": "Amethyst",
+      "swatch": "#6D4C7D",
+      "overrides": {
+        "color": "#6D4C7D"
+      }
+    },
+    {
+      "id": "bronze",
+      "name": "Bronze Shimmer",
+      "swatch": "#9C6B3C",
+      "overrides": {
+        "color": "#9C6B3C",
+        "finish": "shimmer"
+      }
+    },
+    {
+      "id": "taupe",
+      "name": "Satin Taupe",
+      "swatch": "#8A7568",
+      "overrides": {
+        "color": "#8A7568",
+        "finish": "satin"
+      }
+    }
+  ]
+}

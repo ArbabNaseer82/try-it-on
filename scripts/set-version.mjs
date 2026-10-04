@@ -1,4 +1,4 @@
-// Sets the same version on @tryonit/core, @tryonit/web and @tryonit/react.
+// Sets the same version on every published @tryonit package.
 // Usage: node scripts/set-version.mjs 0.2.0
 import { readFileSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
@@ -9,7 +9,7 @@ if (!version || !/^\d+\.\d+\.\d+(-[\w.]+)?$/.test(version)) {
   console.error('Usage: node scripts/set-version.mjs <major.minor.patch>');
   process.exit(1);
 }
-for (const name of ['core', 'web', 'react']) {
+for (const name of ['core', 'web', 'react', 'react-native']) {
   const file = join(root, 'packages', name, 'package.json');
   const pkg = JSON.parse(readFileSync(file, 'utf8'));
   const previous = pkg.version;

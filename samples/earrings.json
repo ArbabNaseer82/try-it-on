@@ -1,0 +1,9 @@
+{
+  "$schema": "https://unpkg.com/@tryonit/core/dist/manifest.v1.schema.json",
+  "version": 1,
+  "id": "earrings-pearl",
+  "type": "earrings",
+  "name": "Pearl Drops",
+  "model": "models3d/earring.glb",
+  "thumbnail": "thumbs/earrings.svg"
+}

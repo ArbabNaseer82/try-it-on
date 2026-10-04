@@ -1,0 +1,12 @@
+{
+  "$schema": "https://unpkg.com/@tryonit/core/dist/manifest.v1.schema.json",
+  "version": 1,
+  "id": "glasses-round",
+  "type": "glasses",
+  "name": "Round Frames",
+  "model": "models3d/glasses-round.glb",
+  "thumbnail": "thumbs/glasses-round.svg",
+  "meta": {
+    "sku": "EYE-ROUND"
+  }
+}
