@@ -1,0 +1,67 @@
+{
+  "$schema": "https://unpkg.com/@tryonit/core/dist/manifest.v1.schema.json",
+  "version": 1,
+  "id": "lipstick-velvet",
+  "type": "makeup.lips",
+  "name": "Velvet Lipstick",
+  "color": "#B0123A",
+  "finish": "satin",
+  "variants": [
+    {
+      "id": "ruby",
+      "name": "Ruby",
+      "swatch": "#B0123A",
+      "overrides": {
+        "color": "#B0123A"
+      }
+    },
+    {
+      "id": "rosewood",
+      "name": "Rosewood",
+      "swatch": "#8E3B46",
+      "overrides": {
+        "color": "#8E3B46"
+      }
+    },
+    {
+      "id": "nude",
+      "name": "Nude Beige",
+      "swatch": "#C48A7A",
+      "overrides": {
+        "color": "#C48A7A",
+        "finish": "matte"
+      }
+    },
+    {
+      "id": "coral",
+      "name": "Coral Gloss",
+      "swatch": "#E2584D",
+      "overrides": {
+        "color": "#E2584D",
+        "finish": "gloss"
+      }
+    },
+    {
+      "id": "berry",
+      "name": "Berry",
+      "swatch": "#6E1E4A",
+      "overrides": {
+        "color": "#6E1E4A"
+      }
+    },
+    {
+      "id": "champagne",
+      "name": "Champagne Shimmer",
+      "swatch": "#C99A84",
+      "overrides": {
+        "color": "#C99A84",
+        "finish": "shimmer"
+      }
+    }
+  ],
+  "defaultVariantId": "ruby",
+  "meta": {
+    "sku": "LIP-001",
+    "price": 19
+  }
+}

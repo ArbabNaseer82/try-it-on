@@ -104,11 +104,12 @@ TryOnIt is useful anywhere a person wants to see a wearable product on themselve
 
 ## Packages
 
-| Package                              | What it is                                                                                | Use it when                                                              |
-| ------------------------------------ | ----------------------------------------------------------------------------------------- | ------------------------------------------------------------------------ |
-| [`@tryonit/react`](./packages/react) | React components and hooks (`TryOnButton`, `TryOn`, `TryOnView`, `useTryOn`, ...)         | You use React, Next.js, Remix or React Router                            |
-| [`@tryonit/web`](./packages/web)     | Browser engine plus a framework-free `mount()` UI                                         | You use Vue, Svelte, Angular, plain HTML or want full imperative control |
-| [`@tryonit/core`](./packages/core)   | Zero dependency TypeScript core: manifest validation, state store, anchor math, smoothing | You build tooling, a custom renderer or (soon) React Native              |
+| Package                                            | What it is                                                                                | Use it when                                                                        |
+| -------------------------------------------------- | ----------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------- |
+| [`@tryonit/react`](./packages/react)               | React components and hooks (`TryOnButton`, `TryOn`, `TryOnView`, `useTryOn`, ...)         | You use React, Next.js, Remix or React Router                                      |
+| [`@tryonit/web`](./packages/web)                   | Browser engine plus a framework-free `mount()` UI                                         | You use Vue, Svelte, Angular, plain HTML or want full imperative control           |
+| [`@tryonit/react-native`](./packages/react-native) | React Native and Expo components (`TryOnButton`, `TryOnModal`, `TryOnView`, `useTryOn`)   | You build an iOS or Android app with Expo (including Expo Go) or bare React Native |
+| [`@tryonit/core`](./packages/core)                 | Zero dependency TypeScript core: manifest validation, state store, anchor math, smoothing | You build tooling or a custom renderer                                             |
 
 ## Quick start in 30 seconds
 
@@ -337,6 +338,27 @@ Use `TryOnButton` anywhere. For inline camera views, wrap them in a client only 
 </details>
 
 <details>
+<summary><b>React Native and Expo (iOS, Android, Expo Go)</b></summary>
+
+```bash
+npx expo install @tryonit/react-native react-native-webview
+# bare React Native: npm install @tryonit/react-native react-native-webview && cd ios && pod install
+```
+
+```tsx
+import { TryOnButton } from '@tryonit/react-native';
+
+<TryOnButton
+  asset="https://cdn.example.com/tryon/aviator.json"
+  onCapture={(photo) => save(photo.base64)}
+/>;
+```
+
+Same manifests as the web, works in Expo Go, dev builds and bare apps. Add `"plugins": ["@tryonit/react-native"]` to `app.json` for your own builds. See [`packages/react-native`](./packages/react-native) and [`examples/expo-app`](./examples/expo-app).
+
+</details>
+
+<details>
 <summary><b>Vue, Svelte, Angular, plain HTML, Shopify themes</b></summary>
 
 ```ts
@@ -442,15 +464,16 @@ It is an experimental 2D overlay that warps a front facing garment image onto yo
 **Can I use it with Vue, Svelte or Angular?**
 Yes, through `@tryonit/web` and `mount()` or the imperative engine.
 
-**What about React Native?**
-The core is already platform agnostic. A native package is planned, see [docs/REACT_NATIVE_PLAN.md](./docs/REACT_NATIVE_PLAN.md).
+**What about React Native and Expo?**
+Use [`@tryonit/react-native`](./packages/react-native). It works in Expo Go, Expo dev builds and bare React Native with the same manifests. A fully native engine is planned for even higher performance, see [docs/REACT_NATIVE_PLAN.md](./docs/REACT_NATIVE_PLAN.md).
 
 ## Roadmap
 
 - [x] Web engine, React components, makeup, hair, glasses, hats, earrings, watches, rings, stickers
 - [x] Experimental 2D clothing overlay
 - [ ] Web Worker tracking mode (planned, see `trackers/tracker.interface.ts`)
-- [ ] `@tryonit/react-native` with native MediaPipe, Skia and Filament ([plan](./docs/REACT_NATIVE_PLAN.md))
+- [x] `@tryonit/react-native` for Expo Go, Expo dev builds and bare React Native (WebView engine)
+- [ ] Fully native React Native engine with VisionCamera, native MediaPipe, Skia and Filament ([plan](./docs/REACT_NATIVE_PLAN.md))
 - [ ] Nail polish and contact lens asset types
 - [ ] Multi product layering (lipstick and glasses at the same time)
 

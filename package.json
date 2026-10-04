@@ -29,7 +29,8 @@
     "release:check": "pnpm verify && pnpm publint && pnpm attw && pnpm -r --filter \"./packages/*\" exec pnpm pack --dry-run",
     "release:publish": "pnpm -r --filter \"./packages/*\" publish --access public",
     "version:set": "node scripts/set-version.mjs",
-    "validate-assets": "node packages/core/bin/tryonit-validate.mjs"
+    "validate-assets": "node packages/core/bin/tryonit-validate.mjs",
+    "bundle:expo": "pnpm --filter expo-app exec expo export --platform android --platform ios --output-dir dist"
   },
   "devDependencies": {
     "@arethetypeswrong/cli": "0.18.5",
@@ -98,6 +99,19 @@
       "rolldown": false,
       "limit": "3 KB",
       "gzip": true
+    },
+    {
+      "name": "@tryonit/react-native (includes the embedded WebView runtime)",
+      "path": "packages/react-native/dist/index.mjs",
+      "ignore": [
+        "react",
+        "react-native",
+        "react-native-webview",
+        "react/jsx-runtime",
+        "@tryonit/core"
+      ],
+      "gzip": true,
+      "limit": "45 KB"
     }
   ]
 }

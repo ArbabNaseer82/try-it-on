@@ -656,6 +656,33 @@ for (const example of EXAMPLES) {
   }
   targets++;
 }
+// A small committed subset in /samples, served by jsDelivr from GitHub for the React Native
+// example: https://cdn.jsdelivr.net/gh/ArbabNaseer82/try-it-on@main/samples/<file>
+const SAMPLES = [
+  'lipstick.json',
+  'look.json',
+  'thumbs/look.svg',
+  'hair.json',
+  'eyeshadow.json',
+  'glasses-aviator.json',
+  'models3d/glasses-aviator.glb',
+  'thumbs/glasses-aviator.svg',
+  'glasses-round.json',
+  'models3d/glasses-round.glb',
+  'thumbs/glasses-round.svg',
+  'earrings.json',
+  'models3d/earring.glb',
+  'thumbs/earrings.svg',
+  'moustache.json',
+  'images/moustache.png',
+  'thumbs/moustache.svg',
+];
+for (const rel of SAMPLES) {
+  const full = join(root, 'samples', rel);
+  mkdirSync(join(full, '..'), { recursive: true });
+  writeFileSync(full, files.get(rel));
+}
+
 // Also keep a copy for tests and tooling.
 const cacheDir = join(root, '.cache', 'assets');
 for (const [rel, content] of files) {

@@ -1,6 +1,6 @@
 # Plan: `@tryonit/react-native`
 
-Status: **planned, not built yet.** This document describes how the native package will reuse the existing architecture.
+Status: **phase 1 shipped.** `@tryonit/react-native` 0.1 runs the TryOnIt engine inside `react-native-webview` (works in Expo Go, Expo dev builds and bare React Native). This document describes the fully native engine planned behind the same public API.
 
 ## Goals
 
@@ -38,13 +38,21 @@ Rendering
 - 3D: Filament renders the same GLB files authored in millimeters with the same axis conventions; occluders become depth only materials.
 - Requires a development build (not Expo Go) and an Expo config plugin that adds the MediaPipe dependencies and camera permissions.
 
-## Quick win interim option
+## Phase 1 (shipped): WebView engine
 
-A `TryOnWebView` component that hosts `@tryonit/web` (`mount()`) inside `react-native-webview`, with camera permission forwarding. It works in Expo Go and gives React Native apps try-on today, at the cost of WebView performance.
+`TryOnView`, `TryOnModal`, `TryOnButton` and `useTryOn` host `@tryonit/web` inside `react-native-webview`:
+
+- The TryOnIt code (core, web engine and a message bridge) is embedded in the package by `packages/react-native/scripts/build-runtime.mjs`. MediaPipe and three.js load lazily from a CDN through an import map (three.js only for 3D products).
+- The page runs on `https://tryonit.local/` (a secure origin, required for the camera). Commands go in through `injectJavaScript`, events come out through `postMessage` (`src/protocol.ts`).
+- Products are resolved and validated with `@tryonit/core` on the React Native side.
+- An Expo config plugin (`app.plugin.js`) adds the camera permissions for dev builds.
+- Tested by `e2e/react-native-runtime.spec.ts` (the exact page in Chromium with a fake camera) and by bundling `examples/expo-app` with Metro for iOS and Android.
+
+The native engine below will keep this public API, so apps can upgrade without code changes.
 
 ## Milestones
 
-1. `TryOnWebView` interim component.
+1. WebView engine (shipped in 0.1).
 2. Nitro frame processor plugin for Face Landmarker (iOS and Android), JS anchors via core.
 3. Skia makeup renderer (lips first, then all makeup types).
 4. Filament 3D renderer (glasses with head occluder).

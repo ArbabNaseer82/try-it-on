@@ -28,3 +28,8 @@ test-results
 
 # Copied from the root LICENSE by each package build
 packages/*/LICENSE
+
+# React Native
+packages/react-native/src/generated/runtime.js
+examples/expo-app/.expo
+examples/expo-app/dist

@@ -21,6 +21,8 @@ export default tseslint.config(
       'playwright-report/**',
       'test-results/**',
       '**/next-env.d.ts',
+      'packages/react-native/src/generated/runtime.js',
+      'examples/expo-app/.expo/**',
     ],
   },
   js.configs.recommended,
@@ -139,6 +141,21 @@ export default tseslint.config(
       '@typescript-eslint/no-restricted-imports': [
         'error',
         { paths: [{ name: 'react', message: 'web never imports React.' }] },
+      ],
+    },
+  },
+  {
+    // React Native side: talks to the camera page only through the message bridge.
+    files: ['packages/react-native/src/**/*.{ts,tsx}'],
+    plugins: { 'react-hooks': reactHooks },
+    rules: {
+      ...reactHooks.configs.recommended.rules,
+      'no-restricted-imports': [
+        'error',
+        restrict(
+          ['@tryonit/web', '@tryonit/react', 'react-dom', 'three', 'three/*', '@mediapipe/*'],
+          'react-native code runs on the device JS engine: use @tryonit/core and the WebView bridge.',
+        ),
       ],
     },
   },

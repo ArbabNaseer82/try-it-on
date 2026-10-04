@@ -499,6 +499,16 @@ Every component accepts three kinds of `asset`:
 - **Shopify**: store the manifest in a product metafield of type JSON (for example `tryon.manifest`), output it in your theme or Hydrogen loader, and pass the object to the component. With a plain theme, use `mount()` from `@tryonit/web` and `JSON.parse` the metafield value.
 - Results are validated and cached by `id`. The `signal` cancels the request when the shopper switches products quickly.
 
+### React Native and Expo
+
+`@tryonit/react-native` uses the same manifests. Pass a manifest object, an absolute `https://` URL to a manifest, or an async loader. Files referenced inside a manifest loaded from a URL can stay relative to it; files in manifest objects must be absolute URLs. Local bundled files are not reachable from the camera view, so host them on your CDN (with CORS).
+
+```tsx
+import { TryOnButton } from '@tryonit/react-native';
+
+<TryOnButton asset="https://cdn.example.com/tryon/aviator.json" />;
+```
+
 ## 8. Creating products in TypeScript
 
 All manifest types are exported, so your editor checks fields while you type:
