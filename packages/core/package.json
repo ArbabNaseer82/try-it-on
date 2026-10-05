@@ -1,6 +1,6 @@
 {
   "name": "@tryonit/core",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Platform-agnostic core of TryOnIt, the open-source virtual try-on SDK: asset manifest validation, state store, face/hand/body anchor math and smoothing filters. Zero dependencies, no DOM.",
   "license": "MIT",
   "author": "arbab-naseer (https://github.com/ArbabNaseer82)",

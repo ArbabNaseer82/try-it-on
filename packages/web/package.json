@@ -1,6 +1,6 @@
 {
   "name": "@tryonit/web",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Client-side virtual try-on engine for the browser: real-time makeup, glasses, hats, earrings, watches, rings, hair color and clothing overlays using MediaPipe and WebGL. Framework-free mount() for Vue, Svelte, Angular and plain HTML.",
   "license": "MIT",
   "author": "arbab-naseer (https://github.com/ArbabNaseer82)",
