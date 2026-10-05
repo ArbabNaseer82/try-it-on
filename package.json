@@ -30,10 +30,15 @@
     "release:publish": "pnpm -r --filter \"./packages/*\" publish --access public",
     "version:set": "node scripts/set-version.mjs",
     "validate-assets": "node packages/core/bin/tryonit-validate.mjs",
-    "bundle:expo": "pnpm --filter expo-app exec expo export --platform android --platform ios --output-dir dist"
+    "bundle:expo": "pnpm --filter expo-app exec expo export --platform android --platform ios --output-dir dist",
+    "changeset": "changeset",
+    "version-packages": "changeset version && pnpm install --lockfile-only",
+    "release:ci": "changeset publish"
   },
   "devDependencies": {
     "@arethetypeswrong/cli": "0.18.5",
+    "@changesets/changelog-github": "^1.0.1",
+    "@changesets/cli": "^3.0.3",
     "@eslint/js": "10.0.1",
     "@playwright/test": "1.63.0",
     "@size-limit/preset-small-lib": "14.1.0",
