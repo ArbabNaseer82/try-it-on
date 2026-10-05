@@ -1,27 +1,14 @@
 # Changelog
 
-All notable changes to this project are documented here. The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and the project uses [Semantic Versioning](https://semver.org/).
+From 0.1.1 on, every package keeps its own `CHANGELOG.md` inside its folder (`packages/core`, `packages/web`, `packages/react`, `packages/react-native`), written by [changesets](https://github.com/changesets/changesets) on each release. Release notes are also on the [GitHub releases page](https://github.com/ArbabNaseer82/try-it-on/releases).
 
-## [Unreleased]
+## 0.1.0 (2026-10-04)
 
-### Added
+First public release of all four packages.
 
-- `@tryonit/react-native`: `TryOnButton`, `TryOnModal`, `TryOnView` and `useTryOn` for Expo Go, Expo dev builds and bare React Native, running the TryOnIt engine in `react-native-webview` with a typed message bridge, photo capture as data URL and base64, theme and labels, self hosting options, and an Expo config plugin for camera permissions.
-- `examples/expo-app`: Expo SDK 57 demo with a product list and a custom UI screen.
-- `samples/`: hosted sample products (served by jsDelivr) for mobile demos.
-
-## [0.1.0] - not yet published
-
-### Added
-
-- `@tryonit/core`: asset manifest v1 types and custom validator for 15 asset types, session store with finite state machine, typed event emitter, One Euro, quaternion and pose filters, homography, polygon triangulation, face, hand and body anchors, iris based metric scale, asset resolver (object, URL, async loader, abort, LRU cache), JSON Schema for editors.
-- `@tryonit/web`: camera and photo sources, lazy MediaPipe trackers (face, hand, pose, hair) with GPU to CPU fallback, custom WebGL2 makeup, hair and 2D overlay renderers, lazy three.js renderer with head, wrist and finger occluders, adaptive frame loop, capture, preload, debug overlay, framework free `mount()`.
-- `@tryonit/react`: `TryOnProvider`, `TryOn`, `TryOnButton`, `TryOnModal`, `TryOnView`, product switcher, shade swatches, capture, camera switch, compare slider, intensity slider, status overlay, permission prompt, headless hooks, theme to CSS variables, icons, labels, `unstyled` and `slots`.
-- Examples: Vite playground, Next.js App Router, React Router v7 (Remix), vanilla HTML.
-- Procedural sample assets, model fetch script, documentation.
-- `tryonit-validate` command line tool in `@tryonit/core` for checking manifests and their GLB and PNG files.
-- Guide for creating products and filters (`docs/CREATING_PRODUCTS.md`) and a publishing guide (`docs/PUBLISHING.md`).
-
-### Experimental
-
-- `clothing.top` 2D garment overlay.
+- `@tryonit/core`: asset manifest v1 with a validator for 15 asset types, session store, typed events, One Euro and pose filters, face, hand and body anchors, iris based real world scale, asset resolver (object, URL or async loader), JSON Schema for editors, and the `tryonit-validate` CLI.
+- `@tryonit/web`: camera and photo sources, lazy MediaPipe trackers (face, hand, pose, hair) with GPU to CPU fallback, WebGL2 makeup, hair and 2D overlay renderers, lazy three.js renderer with head, wrist and finger occlusion, capture, preload, debug overlay, and the framework free `mount()`.
+- `@tryonit/react`: `TryOnProvider`, `TryOn`, `TryOnButton`, `TryOnModal`, `TryOnView`, headless hooks, theming through CSS variables, replaceable icons, labels and slots, and an `unstyled` mode.
+- `@tryonit/react-native`: `TryOnButton`, `TryOnModal`, `TryOnView` and `useTryOn` for Expo Go, Expo dev builds and bare React Native, plus an Expo config plugin for camera permissions.
+- Examples: Vite playground, Next.js App Router, React Router v7 (Remix), vanilla HTML and an Expo app.
+- Experimental: `clothing.top` 2D garment overlay.

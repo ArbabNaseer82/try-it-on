@@ -280,6 +280,6 @@ Camera frames stay on the device. TryOnIt sends no analytics. The only network r
 
 ## Limits and roadmap
 
-This package runs the engine in a WebView: it works everywhere React Native runs, including Expo Go, and shares 100% of its behavior with the web packages. A fully native engine (VisionCamera, native MediaPipe, Skia and Filament) is planned for even higher performance, with the same API. See the [React Native plan](https://github.com/ArbabNaseer82/try-it-on/blob/main/docs/REACT_NATIVE_PLAN.md).
+This package runs the engine in a WebView: it works everywhere React Native runs, including Expo Go, and shares 100% of its behavior with the web packages. A fully native engine (VisionCamera, native MediaPipe, Skia and Filament) is on the roadmap, behind the same API.
 
 MIT licensed.

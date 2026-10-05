@@ -2,7 +2,7 @@
 
 ## Prerequisites
 
-- Node.js 20.19 or newer (LTS recommended)
+- Node.js 22 or newer
 - pnpm 12 (`npm install -g pnpm@12` or `corepack enable`)
 - A webcam, or a phone on the same Wi-Fi network
 
@@ -34,7 +34,7 @@ Playground URL parameters: `?asset=glasses-aviator` preselects a sample, `?layou
 
 ## Testing the React Native package
 
-`examples/expo-app` uses `@tryonit/react-native` from the workspace and the hosted samples in `samples/` (served by jsDelivr once the repository is public).
+`examples/expo-app` uses `@tryonit/react-native` from the workspace and the hosted samples in `samples/` (served from this repository by jsDelivr).
 
 ```bash
 pnpm build                          # builds every package, including the embedded WebView engine
