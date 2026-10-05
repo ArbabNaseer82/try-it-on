@@ -1,135 +1,54 @@
-<div align="center">
-
 # TryOnIt
 
-### Free, open-source virtual try-on SDK for the web and React
+Open source virtual try-on for the web, React and React Native.
 
-Let shoppers see **makeup, glasses, sunglasses, hats, earrings, watches, rings, hair color and clothing** on themselves in real time, using the front camera of their phone or laptop. **100% client-side**: no servers, no per-try fees, and no camera frame ever leaves the device.
+Shoppers see makeup, glasses, hats, earrings, watches, rings and hair color on themselves, live, through the camera of their phone or laptop. Everything runs on the device: no servers to pay for, no per-try fees, and camera frames never leave the browser.
 
 [![npm](https://img.shields.io/npm/v/@tryonit/react?label=%40tryonit%2Freact)](https://www.npmjs.com/package/@tryonit/react)
+[![npm](https://img.shields.io/npm/v/@tryonit/react-native?label=%40tryonit%2Freact-native)](https://www.npmjs.com/package/@tryonit/react-native)
+[![CI](https://github.com/ArbabNaseer82/try-it-on/actions/workflows/ci.yml/badge.svg)](https://github.com/ArbabNaseer82/try-it-on/actions/workflows/ci.yml)
 [![license: MIT](https://img.shields.io/badge/license-MIT-green.svg)](./LICENSE)
-![TypeScript](https://img.shields.io/badge/TypeScript-strict-blue)
-![runtime deps](https://img.shields.io/badge/core%20dependencies-0-brightgreen)
 
-[Quick start](#quick-start-in-30-seconds) · [Problems it solves](#what-problems-does-tryonit-solve) · [Use cases](#which-projects-is-it-for) · [Implementation guide](#implementation-guide) · [Docs](#documentation) · [FAQ](#faq)
-
-</div>
-
----
-
-<!-- Demo GIF: record the playground (pnpm dev) and save it as docs/media/demo.gif -->
-<p align="center"><em>Demo GIF placeholder: <code>docs/media/demo.gif</code> (lipstick shades, aviator glasses with head occlusion, watch on wrist).</em></p>
-
-## What is TryOnIt?
-
-TryOnIt is an **open-source augmented reality (AR) virtual try-on library** for e-commerce. You install one package, point it at a product description (a small JSON "asset manifest"), and render one component. TryOnIt opens the camera, tracks the face, hand or body with **Google MediaPipe**, and renders the product on top with **WebGL** (custom shaders for makeup and 2D overlays, **three.js** for 3D models).
+[Packages](#packages) · [Quick start](#quick-start) · [Frameworks](#framework-setup) · [Products](#products-and-asset-manifests) · [Customizing](#customizing-the-ui) · [Going to production](#going-to-production) · [Docs](#documentation) · [Video walkthrough](#video-walkthrough)
 
 ```tsx
 import { TryOnButton } from '@tryonit/react';
 import '@tryonit/react/styles.css';
 
-<TryOnButton asset="/assets/aviator.json" />;
+<TryOnButton asset="/tryon/aviator.json" />;
 ```
 
-That is a complete, accessible, themeable try-on experience: camera permission flow, loading states, "look at the camera" hints, product and shade switcher, before and after compare, photo capture with download and share, and a photo upload fallback when the camera is blocked.
-
-## What problems does TryOnIt solve?
-
-| Problem                                                                                                                | How TryOnIt solves it                                                                                                                                               |
-| ---------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **High return rates** for eyewear, beauty, jewelry and fashion because shoppers cannot see how a product looks on them | Real time try-on on the shopper's own face, hand or body before they buy, with real world scale for glasses (iris based metric scale)                               |
-| **Low conversion on product pages**                                                                                    | A one line "Try it on" button that keeps shoppers engaged and lets them compare shades and styles instantly                                                         |
-| **Expensive AR SaaS** with per-try or per-SKU pricing and vendor lock-in                                               | MIT licensed, free forever, runs entirely in the browser, so there is no backend bill at any traffic level                                                          |
-| **Privacy and compliance risk** (GDPR, CCPA, biometric data laws) from streaming faces to third party servers          | Zero servers: every frame is processed on device. No analytics, no tracking, no network calls except the model and asset files you configure                        |
-| **Slow pages** from heavy AR scripts                                                                                   | Tiny base bundle, everything lazy loaded: MediaPipe, models and three.js load only when a shopper opens try-on and only for the product type they need              |
-| **Generic widgets that do not match the brand**                                                                        | Theme tokens, CSS variables, per-slot class names, replaceable icons, images and labels, an `unstyled` mode and fully headless hooks                                |
-| **Framework lock-in**                                                                                                  | Works in React, Next.js (App and Pages Router), Remix / React Router, Vite, plus a framework-free `mount()` for Vue, Svelte, Angular, Shopify themes and plain HTML |
-| **Hard to add new products**                                                                                           | Products are plain JSON manifests: a color for a lipstick, a `.glb` file for glasses. Load them inline, from a URL, or from your own API                            |
-
-## How it works
-
-```
-Camera (getUserMedia)  ─┐
-or uploaded photo       ├─> MediaPipe tracker (lazy)  ─> One Euro smoothing ─> anchors (pose, scale)
-                        │     face / hand / pose / hair       (jitter free)        (core, pure TS)
-                        │
-                        └─> Renderer (lazy) ──────────────────────────────────────────┐
-                              makeup + hair + 2D overlays: custom WebGL2 shaders       ├─> canvas on top of video
-                              glasses, hats, earrings, watches, rings: three.js        ┘    capture to PNG/JPEG
-```
-
-1. **Tracking**: MediaPipe Face Landmarker (478 points plus a 3D head transform), Hand Landmarker, Pose Landmarker and the hair segmenter, all running in WebAssembly on the GPU with automatic CPU fallback.
-2. **Anchoring**: pure TypeScript math in `@tryonit/core` turns landmarks into stable 3D poses (nose bridge for glasses, ear lobes for earrings, wrist frame for watches, finger segments for rings, torso quad for clothing) and smooths them with the One Euro filter.
-3. **Rendering**: makeup uses luminance aware blending so skin and lip texture stay visible (matte, satin, gloss and shimmer finishes, teeth excluded). 3D accessories use invisible occluders (head, wrist, finger) so glasses temples and watch straps disappear behind you naturally.
-
-Read the full design in [docs/ARCHITECTURE.md](./docs/ARCHITECTURE.md).
-
-## Features
-
-| Category              | Asset `type`        | Tracking            | Rendering                                 | Status           |
-| --------------------- | ------------------- | ------------------- | ----------------------------------------- | ---------------- |
-| Lipstick, lip gloss   | `makeup.lips`       | Face                | WebGL2 (matte, satin, gloss, shimmer)     | Stable           |
-| Blush                 | `makeup.blush`      | Face                | WebGL2                                    | Stable           |
-| Eyeshadow             | `makeup.eyeshadow`  | Face                | WebGL2                                    | Stable           |
-| Eyeliner (winged)     | `makeup.eyeliner`   | Face                | WebGL2                                    | Stable           |
-| Brows                 | `makeup.brows`      | Face                | WebGL2                                    | Stable           |
-| Foundation, skin tint | `makeup.foundation` | Face                | WebGL2 with texture smoothing             | Stable           |
-| Full makeup look      | `makeup.look`       | Face                | WebGL2, layered                           | Stable           |
-| Hair color            | `hair.color`        | Hair segmentation   | WebGL2                                    | Stable           |
-| Glasses, sunglasses   | `glasses`           | Face + 3D head pose | three.js + head occlusion                 | Stable           |
-| Hats, caps            | `hat`               | Face + 3D head pose | three.js + head occlusion                 | Stable           |
-| Earrings              | `earrings`          | Face                | three.js, hides the far ear on head turns | Stable           |
-| Face stickers, masks  | `face.overlay2d`    | Face                | WebGL2                                    | Stable           |
-| Watches, bracelets    | `watch`             | Hand                | three.js + wrist occlusion                | Stable           |
-| Rings                 | `ring`              | Hand                | three.js + finger occlusion               | Stable           |
-| T-shirts, tops        | `clothing.top`      | Body pose           | WebGL2 homography warp                    | **Experimental** |
-
-Plus: shade and variant switching, product switcher, intensity slider, before and after compare, photo capture, photo upload fallback, front and rear camera switching, dark mode, RTL, i18n, keyboard and screen reader support, debug landmark overlay and FPS HUD.
-
-## Which projects is it for?
-
-TryOnIt is useful anywhere a person wants to see a wearable product on themselves before deciding:
-
-- **Beauty and cosmetics stores**: lipstick shade finders, foundation matching, eyeshadow palettes, complete makeup looks.
-- **Eyewear and optical retailers**: prescription frames and sunglasses with realistic size and head occlusion.
-- **Jewelry and watch brands**: earrings, rings and wrist watches on the shopper's own hand and ears.
-- **Hats, caps and headwear shops**.
-- **Hair color brands and salons**: preview a color before a box dye purchase or a salon booking.
-- **Fashion and apparel (experimental)**: quick 2D t-shirt and top previews for campaigns and lookbooks.
-- **Shopify, WooCommerce, BigCommerce and headless commerce storefronts** (React, Next.js, Hydrogen, Remix, or a plain script tag through `mount()`).
-- **Marketplaces and D2C brands** that need try-on across many SKUs without per-SKU fees.
-- **Marketing microsites and social campaigns**: branded face stickers and filters with photo sharing.
-- **Agencies and freelancers** building try-on features for multiple clients under the MIT license.
-- **Privacy sensitive products** (kids, health, regulated markets) where camera data must never leave the device.
+That one button gives you the whole flow: camera permission, loading states, "look at the camera" hints, shade and product switching, before and after compare, photo capture with download and share, and a photo upload fallback when the camera is blocked.
 
 ## Packages
 
-| Package                                            | What it is                                                                                | Use it when                                                                        |
-| -------------------------------------------------- | ----------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------- |
-| [`@tryonit/react`](./packages/react)               | React components and hooks (`TryOnButton`, `TryOn`, `TryOnView`, `useTryOn`, ...)         | You use React, Next.js, Remix or React Router                                      |
-| [`@tryonit/web`](./packages/web)                   | Browser engine plus a framework-free `mount()` UI                                         | You use Vue, Svelte, Angular, plain HTML or want full imperative control           |
-| [`@tryonit/react-native`](./packages/react-native) | React Native and Expo components (`TryOnButton`, `TryOnModal`, `TryOnView`, `useTryOn`)   | You build an iOS or Android app with Expo (including Expo Go) or bare React Native |
-| [`@tryonit/core`](./packages/core)                 | Zero dependency TypeScript core: manifest validation, state store, anchor math, smoothing | You build tooling or a custom renderer                                             |
+| Package                                            | Install it when                                                                                          |
+| -------------------------------------------------- | -------------------------------------------------------------------------------------------------------- |
+| [`@tryonit/react`](./packages/react)               | You use React, Next.js, Remix or React Router                                                            |
+| [`@tryonit/react-native`](./packages/react-native) | You build an iOS or Android app with Expo (Expo Go included) or bare React Native                        |
+| [`@tryonit/web`](./packages/web)                   | You use Vue, Svelte, Angular, plain HTML, a Shopify theme, or want the imperative engine                 |
+| [`@tryonit/core`](./packages/core)                 | You build tooling or a custom renderer. Zero dependencies: manifest validation, state store, anchor math |
 
-## Quick start in 30 seconds
+You only install one of the first three. They pull in the lower layers themselves.
+
+## Quick start
 
 ```bash
 npm install @tryonit/react three
-# or: pnpm add @tryonit/react three   |   yarn add @tryonit/react three
 ```
 
-`three` is only needed for 3D products (glasses, hats, earrings, watches, rings). Makeup, hair color, stickers and clothing never download it.
+`three` is only loaded for 3D products (glasses, hats, earrings, watches, rings). Makeup, hair color and stickers never download it, so you can skip it if you only sell those.
 
 ```tsx
 import { TryOnButton } from '@tryonit/react';
 import '@tryonit/react/styles.css';
 
 export function ProductPage() {
-  return <TryOnButton asset="/assets/aviator.json" />;
+  return <TryOnButton asset="/tryon/aviator.json" />;
 }
 ```
 
-`/assets/aviator.json`:
+Put the product description next to its model in `public/tryon/`:
 
 ```json
 {
@@ -142,60 +61,131 @@ export function ProductPage() {
 }
 ```
 
-The camera needs a secure context: `https://` or `http://localhost`.
+The camera only works in a secure context, so use `https://` or `http://localhost` while developing.
 
-## Create your own products and filters
+Want something to try first? Clone the repo and run the playground, it ships with sample products:
 
-Every product is a small JSON **asset manifest**, plus one file for products that need it:
-
-| You want                                                | `type`                                        | File you provide                |
-| ------------------------------------------------------- | --------------------------------------------- | ------------------------------- |
-| Lipstick, blush, eyeshadow, eyeliner, brows, foundation | `makeup.*`                                    | none, only colors               |
-| Beauty filter (full makeup look)                        | `makeup.look`                                 | none                            |
-| Hair color                                              | `hair.color`                                  | none                            |
-| Fun face filter, sticker, mask                          | `face.overlay2d`                              | PNG with transparent background |
-| Glasses, hats, earrings, watches, rings                 | `glasses`, `hat`, `earrings`, `watch`, `ring` | GLB 3D model in millimeters     |
-| T-shirt or top (experimental)                           | `clothing.top`                                | PNG plus 4 anchor points        |
-
-```json
-{ "version": 1, "id": "ruby", "type": "makeup.lips", "color": "#B0123A", "finish": "satin" }
+```bash
+pnpm install && pnpm setup:examples && pnpm dev   # http://localhost:5173
 ```
 
-```json
-{
-  "version": 1,
-  "id": "moustache",
-  "type": "face.overlay2d",
-  "image": "moustache.png",
-  "anchor": "mouth",
-  "scale": 0.55
+## Framework setup
+
+### Next.js (App Router)
+
+Every export is already a client component (`'use client'` is added at build time), so you can use it straight from a Server Component page:
+
+```tsx
+// app/products/[id]/page.tsx
+import { TryOnButton } from '@tryonit/react';
+import '@tryonit/react/styles.css';
+
+export default function Product() {
+  return <TryOnButton asset="/tryon/aviator.json" />;
 }
 ```
 
-```json
-{ "version": 1, "id": "aviator", "type": "glasses", "model": "aviator.glb" }
+Passing a loader function (for example, fetching the manifest from your API) needs a client component of your own. See [`examples/nextjs-app`](./examples/nextjs-app).
+
+**Pages Router:** import the CSS in `pages/_app.tsx` and use the components in any page. They render a light placeholder on the server and never touch `window` during render.
+
+### Remix / React Router v7
+
+`TryOnButton` works anywhere. Inline camera views should sit inside a client only guard. Load the CSS through `links`:
+
+```tsx
+import { TryOnButton } from '@tryonit/react';
+import styles from '@tryonit/react/styles.css?url';
+
+export const links = () => [{ rel: 'stylesheet', href: styles }];
+
+export default function Product() {
+  return <TryOnButton asset="/tryon/aviator.json" />;
+}
 ```
 
-Check your files before shipping:
+See [`examples/remix-app`](./examples/remix-app).
+
+### React Native and Expo
 
 ```bash
-npx -p @tryonit/core tryonit-validate public/tryon
+npx expo install @tryonit/react-native react-native-webview
+# bare React Native:
+npm install @tryonit/react-native react-native-webview && cd ios && pod install
 ```
 
-Step by step recipes for every type (beauty filters, stickers, 3D models, variants, hosting, Shopify and CMS loading, troubleshooting): **[Creating products and filters](./docs/CREATING_PRODUCTS.md)**.
+```tsx
+import { TryOnButton } from '@tryonit/react-native';
 
-## Implementation guide
+export default function Product() {
+  return (
+    <TryOnButton
+      asset="https://cdn.example.com/tryon/aviator.json"
+      onCapture={(photo) => save(photo.base64)}
+    />
+  );
+}
+```
 
-### Step 1: Install
+It works in Expo Go as is. For your own builds, add `"plugins": ["@tryonit/react-native"]` to `app.json` so the camera permissions are set. Use absolute `https://` URLs for products on mobile. Full API in the [package README](./packages/react-native) and a working app in [`examples/expo-app`](./examples/expo-app).
+
+### Vue, Svelte, Angular, plain HTML
 
 ```bash
-npm install @tryonit/react three      # React, Next.js, Remix
-npm install @tryonit/web three        # Vue, Svelte, Angular, plain HTML
+npm install @tryonit/web three
 ```
 
-### Step 2: Describe your products as asset manifests
+```ts
+import { mount } from '@tryonit/web';
+import '@tryonit/web/styles.css';
 
-A manifest is JSON (or a JS object) with a `type` and a few fields. Colors for makeup, a `.glb` model for 3D items, a PNG for stickers and garments. Variants let one product carry several shades or styles.
+const tryon = mount(document.querySelector('#tryon')!, {
+  asset: '/tryon/aviator.json',
+  theme: { 'color-primary': '#0f766e' },
+  onCapture: (blob) => console.log(blob),
+});
+
+// later
+tryon.setAsset('/tryon/round.json');
+tryon.destroy();
+```
+
+Call `mount` in `onMounted` (Vue), `onMount` (Svelte) or `ngAfterViewInit` (Angular), and `destroy()` when the component unmounts. See [`examples/vanilla-html`](./examples/vanilla-html).
+
+### Imperative engine
+
+For full control without any UI:
+
+```ts
+import { createTryOnEngine } from '@tryonit/web';
+
+const engine = createTryOnEngine({ container: el, performance: 'auto' });
+await engine.setAsset('/tryon/lipstick.json');
+await engine.start();
+engine.setVariant('nude');
+const photo = await engine.capture({ type: 'image/jpeg', quality: 0.9 });
+engine.destroy();
+```
+
+## Products and asset manifests
+
+Each product is a small JSON file (or a JS object) called an asset manifest. Makeup and hair only need colors. 3D products point to a GLB model, stickers to a PNG.
+
+| Product                                       | `type`                                                                                     | Tracking           | You provide             | Status       |
+| --------------------------------------------- | ------------------------------------------------------------------------------------------ | ------------------ | ----------------------- | ------------ |
+| Lipstick, lip gloss                           | `makeup.lips`                                                                              | Face               | colors                  | Stable       |
+| Blush, eyeshadow, eyeliner, brows, foundation | `makeup.blush`, `makeup.eyeshadow`, `makeup.eyeliner`, `makeup.brows`, `makeup.foundation` | Face               | colors                  | Stable       |
+| Full makeup look                              | `makeup.look`                                                                              | Face               | colors                  | Stable       |
+| Hair color                                    | `hair.color`                                                                               | Hair segmentation  | a color                 | Stable       |
+| Glasses, sunglasses                           | `glasses`                                                                                  | Face and head pose | GLB in millimeters      | Stable       |
+| Hats, caps                                    | `hat`                                                                                      | Face and head pose | GLB in millimeters      | Stable       |
+| Earrings                                      | `earrings`                                                                                 | Face               | GLB in millimeters      | Stable       |
+| Face stickers, masks                          | `face.overlay2d`                                                                           | Face               | transparent PNG         | Stable       |
+| Watches, bracelets                            | `watch`                                                                                    | Hand               | GLB in millimeters      | Stable       |
+| Rings                                         | `ring`                                                                                     | Hand               | GLB in millimeters      | Stable       |
+| T-shirts, tops                                | `clothing.top`                                                                             | Body pose          | PNG and 4 anchor points | Experimental |
+
+A lipstick with three shades:
 
 ```json
 {
@@ -224,31 +214,38 @@ A manifest is JSON (or a JS object) with a `type` and a few fields. Colors for m
 }
 ```
 
-Every field, default and example is in [docs/MANIFEST_SPEC.md](./docs/MANIFEST_SPEC.md). Add the `$schema` line to get autocomplete and validation in VS Code. Modeling tips for glasses, watches and rings are in [docs/ASSET_AUTHORING.md](./docs/ASSET_AUTHORING.md).
+A sticker:
 
-### Step 3: Pass the asset in the way that fits your stack
+```json
+{
+  "version": 1,
+  "id": "moustache",
+  "type": "face.overlay2d",
+  "image": "moustache.png",
+  "anchor": "mouth",
+  "scale": 0.55
+}
+```
+
+Pass a manifest in whichever way suits your app:
 
 ```tsx
 <TryOnButton asset={manifestObject} />                                   // inline object
-<TryOnButton asset="https://cdn.example.com/tryon/aviator.json" />        // URL (relative files resolve against it)
+<TryOnButton asset="https://cdn.example.com/tryon/aviator.json" />        // URL, relative files resolve against it
 <TryOnButton asset={(signal) => fetch(`/api/tryon/${sku}`, { signal }).then((r) => r.json())} />  // your API
 ```
 
-Manifests are validated at runtime with readable errors such as `variants[2].color: Expected a color like #RRGGBB`.
+Manifests are validated at runtime with readable errors, for example `variants[2].color: Expected a color like #RRGGBB`. Check your files before you ship:
 
-### Step 4 (recommended for production): self host the models
-
-By default models load from Google's CDN and the MediaPipe wasm from jsDelivr. For strict CSPs, offline kiosks or full control, copy them to your own server:
-
-```tsx
-<TryOnProvider engineOptions={{ modelBaseUrl: '/tryon/models', wasmBaseUrl: '/tryon/wasm' }}>
-  <TryOnButton asset="/assets/aviator.json" />
-</TryOnProvider>
+```bash
+npx -p @tryonit/core tryonit-validate public/tryon
 ```
 
-`scripts/fetch-models.mjs` in this repo shows exactly which files to copy. See [docs/PRIVACY.md](./docs/PRIVACY.md).
+Step by step recipes for every product type, Blender export settings, hosting and loading from a CMS or Shopify are in [docs/CREATING_PRODUCTS.md](./docs/CREATING_PRODUCTS.md). Every field is listed in [docs/MANIFEST_SPEC.md](./docs/MANIFEST_SPEC.md).
 
-### Step 5: Match your brand
+## Customizing the UI
+
+Theme tokens, icons, labels and images go on the provider. Layout, class names and replaced sub components go on `TryOn`:
 
 ```tsx
 <TryOnProvider
@@ -269,17 +266,15 @@ By default models load from Google's CDN and the MediaPipe wasm from jsDelivr. F
     classNames={{ root: 'my-root', toolbar: 'my-toolbar', captureButton: 'my-btn' }}
     slots={{ Toolbar: MyToolbar }}
     onCapture={(blob) => share(blob)}
-    onError={(err) => track(err.code)}
+    onError={(err) => console.warn(err.code)}
   />
 </TryOnProvider>
 ```
 
-Escape hatches in order: `theme` prop, `classNames` per slot (Tailwind and CSS Modules friendly), `unstyled`, `slots` to replace sub components, and headless hooks. Details in [docs/THEMING.md](./docs/THEMING.md).
-
-### Step 6 (optional): build a 100% custom UI with hooks
+From least to most control: the `theme` prop, `classNames` per slot (works with Tailwind and CSS Modules), `unstyled`, `slots`, and finally the headless hooks for a completely custom UI:
 
 ```tsx
-import { TryOnProvider, useTryOn, useTryOnState } from '@tryonit/react';
+import { useTryOn, useTryOnState } from '@tryonit/react';
 
 function MyTryOn() {
   const { status, start, setAsset, capture, attach } = useTryOn();
@@ -288,201 +283,126 @@ function MyTryOn() {
 }
 ```
 
-### Step 7 (optional): preload and analytics
+More in [docs/THEMING.md](./docs/THEMING.md).
 
-```tsx
-<TryOnButton asset={asset} preload="hover" /> // warm models on hover (default), "visible" or "none"
+## Going to production
+
+- **Serve over HTTPS.** Browsers only open the camera on secure pages.
+- **Self host the models** if you have a strict CSP, run offline kiosks, or want zero third party requests. By default the MediaPipe models load from Google's CDN and the wasm from jsDelivr:
+
+  ```tsx
+  <TryOnProvider engineOptions={{ modelBaseUrl: '/tryon/models', wasmBaseUrl: '/tryon/wasm' }}>
+  ```
+
+  [`scripts/fetch-models.mjs`](./scripts/fetch-models.mjs) shows exactly which files to copy. See [docs/PRIVACY.md](./docs/PRIVACY.md).
+
+- **Preload** so the try-on opens instantly: `<TryOnButton preload="hover" />` (the default), `"visible"` or `"none"`.
+- **Keep models small.** GLB files under 1 MB with Meshopt or Draco compression, in millimeters. See [docs/ASSET_AUTHORING.md](./docs/ASSET_AUTHORING.md).
+- **Track what you need.** TryOnIt sends no analytics. Hook into its events instead:
+
+  ```ts
+  engine.on('assetLoaded', (asset) => analytics.track('tryon_view', { sku: asset.meta?.sku }));
+  engine.on('capture', () => analytics.track('tryon_capture'));
+  engine.on('error', (err) => analytics.track('tryon_error', { code: err.code }));
+  ```
+
+## How it works
+
+```
+Camera or uploaded photo
+  -> MediaPipe tracking (face, hands, body, hair), loaded on demand
+  -> anchors in @tryonit/core: pose, real world scale, One Euro smoothing
+  -> rendering: WebGL2 shaders for makeup, hair and stickers, three.js for 3D products
+  -> canvas over the video, capture to PNG or JPEG
 ```
 
-```ts
-engine.on('assetLoaded', (asset) => analytics.track('tryon_view', { sku: asset.meta?.sku }));
-engine.on('capture', () => analytics.track('tryon_capture'));
-engine.on('error', (err) => analytics.track('tryon_error', { code: err.code }));
-```
+- Face tracking uses 478 landmarks plus a 3D head transform, on the GPU with an automatic CPU fallback.
+- Glasses are sized from the iris diameter, so a 140 mm frame modeled in millimeters looks the right size.
+- Makeup blends with the skin's own luminance, so lip and skin texture stay visible and teeth are left alone.
+- 3D products use invisible head, wrist and finger occluders, so temples and straps disappear behind you naturally.
 
-TryOnIt itself never sends analytics. You decide what to track.
-
-## Framework guides
-
-<details>
-<summary><b>Next.js (App Router)</b></summary>
-
-Every TryOnIt export is a client component (the build adds `'use client'`), so you can import it straight into a Server Component page:
-
-```tsx
-// app/products/[id]/page.tsx
-import { TryOnButton } from '@tryonit/react';
-import '@tryonit/react/styles.css';
-
-export default function Product() {
-  return <TryOnButton asset="/assets/aviator.json" />;
-}
-```
-
-Passing a loader function (your API) requires a client component. See [`examples/nextjs-app`](./examples/nextjs-app).
-
-</details>
-
-<details>
-<summary><b>Next.js (Pages Router)</b></summary>
-
-Import the CSS in `pages/_app.tsx` and use the components in any page. They render a lightweight placeholder on the server and never touch `window` during render.
-
-</details>
-
-<details>
-<summary><b>Remix / React Router v7</b></summary>
-
-Use `TryOnButton` anywhere. For inline camera views, wrap them in a client only guard. See [`examples/remix-app`](./examples/remix-app).
-
-</details>
-
-<details>
-<summary><b>React Native and Expo (iOS, Android, Expo Go)</b></summary>
-
-```bash
-npx expo install @tryonit/react-native react-native-webview
-# bare React Native: npm install @tryonit/react-native react-native-webview && cd ios && pod install
-```
-
-```tsx
-import { TryOnButton } from '@tryonit/react-native';
-
-<TryOnButton
-  asset="https://cdn.example.com/tryon/aviator.json"
-  onCapture={(photo) => save(photo.base64)}
-/>;
-```
-
-Same manifests as the web, works in Expo Go, dev builds and bare apps. Add `"plugins": ["@tryonit/react-native"]` to `app.json` for your own builds. See [`packages/react-native`](./packages/react-native) and [`examples/expo-app`](./examples/expo-app).
-
-</details>
-
-<details>
-<summary><b>Vue, Svelte, Angular, plain HTML, Shopify themes</b></summary>
-
-```ts
-import { mount } from '@tryonit/web';
-import '@tryonit/web/styles.css';
-
-const tryon = mount(document.querySelector('#tryon')!, {
-  asset: '/assets/aviator.json',
-  theme: { 'color-primary': '#0f766e' },
-  onCapture: (blob) => console.log(blob),
-});
-// later: tryon.setAsset('/assets/round.json'); tryon.destroy();
-```
-
-Call `mount` in `onMounted` (Vue), `onMount` (Svelte) or `ngAfterViewInit` (Angular), and `destroy()` on unmount. See [`examples/vanilla-html`](./examples/vanilla-html).
-
-</details>
-
-<details>
-<summary><b>Imperative engine (any framework)</b></summary>
-
-```ts
-import { createTryOnEngine } from '@tryonit/web';
-
-const engine = createTryOnEngine({ container: el, performance: 'auto' });
-await engine.setAsset('/assets/lipstick.json');
-await engine.start();
-engine.setVariant('nude');
-const photo = await engine.capture({ type: 'image/jpeg', quality: 0.9 });
-engine.destroy();
-```
-
-</details>
+The full design is in [docs/ARCHITECTURE.md](./docs/ARCHITECTURE.md).
 
 ## Performance
 
-| Bundle (min + gzip)                                                                 | Size          | Budget |
-| ----------------------------------------------------------------------------------- | ------------- | ------ |
-| `@tryonit/core`, typical import (validate + store + resolve)                        | about 5.9 KB  | 8 KB   |
-| `@tryonit/core`, entire public API                                                  | about 12.9 KB | 14 KB  |
-| `@tryonit/web` initial entry (MediaPipe, trackers, renderers and three.js are lazy) | about 22.6 KB | 25 KB  |
-| `@tryonit/react`                                                                    | about 7.9 KB  | 15 KB  |
-| `@tryonit/react/styles.css`                                                         | about 2.5 KB  | 6 KB   |
+| Bundle (min + gzip)                                                            | Size          | Budget |
+| ------------------------------------------------------------------------------ | ------------- | ------ |
+| `@tryonit/core`, typical import                                                | about 5.9 KB  | 8 KB   |
+| `@tryonit/web` initial entry (trackers, renderers and three.js load on demand) | about 22.6 KB | 25 KB  |
+| `@tryonit/react`                                                               | about 7.9 KB  | 15 KB  |
+| `@tryonit/react/styles.css`                                                    | about 2.5 KB  | 6 KB   |
 
-Budgets are enforced in CI with size-limit. Runtime: adaptive detection rate (30 fps, drops to 15 under load), detection on a downscaled frame, render on every animation frame, automatic pause when the tab is hidden, and full cleanup on `destroy()`. See [docs/PERFORMANCE.md](./docs/PERFORMANCE.md).
-
-## Privacy
-
-- Camera frames are processed on the device and are never uploaded.
-- No analytics, cookies or telemetry.
-- Network requests are limited to the model, wasm and asset files you configure. Self host all of them for zero third party requests.
-
-Details in [docs/PRIVACY.md](./docs/PRIVACY.md).
+Budgets are checked in CI. At runtime, detection runs at 30 fps and drops to 15 under load, the loop pauses when the tab is hidden, and `destroy()` releases the camera and GPU memory. Details in [docs/PERFORMANCE.md](./docs/PERFORMANCE.md).
 
 ## Browser support
 
-| Browser                                  | Camera try-on | Notes                                       |
-| ---------------------------------------- | ------------- | ------------------------------------------- |
-| Chrome / Edge (desktop and Android) 111+ | Yes           | GPU delegate, best performance              |
-| Firefox 115+                             | Yes           | CPU fallback on some drivers                |
-| Safari macOS 16.4+                       | Yes           |                                             |
-| Safari iOS / iPadOS 16.4+                | Yes           | All iOS browsers use WebKit. HTTPS required |
-| Samsung Internet 22+                     | Yes           |                                             |
+| Browser                                    | Notes                                       |
+| ------------------------------------------ | ------------------------------------------- |
+| Chrome and Edge 111+ (desktop and Android) | GPU delegate, best performance              |
+| Firefox 115+                               | CPU fallback on some drivers                |
+| Safari 16.4+ (macOS, iOS, iPadOS)          | All iOS browsers use WebKit. HTTPS required |
+| Samsung Internet 22+                       |                                             |
 
-Minimum versions are targets derived from WebGL2, WebAssembly SIMD and `getUserMedia` support. Verify on your own device matrix with the manual QA checklist in [docs/LOCAL_TESTING.md](./docs/LOCAL_TESTING.md). WebGL2 and a secure context (HTTPS or localhost) are required. When the camera is unavailable or denied, shoppers can upload a photo instead.
+WebGL2 is required. When the camera is unavailable or denied, shoppers can upload a photo instead.
+
+## Privacy
+
+Camera frames are processed on the device and never uploaded. There is no analytics, cookie or telemetry code. The only network requests are the model, wasm and product files you configure, and you can self host all of them. More in [docs/PRIVACY.md](./docs/PRIVACY.md).
 
 ## Documentation
 
-| Topic                                                       | Link                                                     |
-| ----------------------------------------------------------- | -------------------------------------------------------- |
-| **Create your own products and filters (formats, recipes)** | [docs/CREATING_PRODUCTS.md](./docs/CREATING_PRODUCTS.md) |
-| Architecture, data flow, adding an asset type               | [docs/ARCHITECTURE.md](./docs/ARCHITECTURE.md)           |
-| Asset manifest reference                                    | [docs/MANIFEST_SPEC.md](./docs/MANIFEST_SPEC.md)         |
-| Theming and customization                                   | [docs/THEMING.md](./docs/THEMING.md)                     |
-| Creating 3D and 2D assets                                   | [docs/ASSET_AUTHORING.md](./docs/ASSET_AUTHORING.md)     |
-| Performance                                                 | [docs/PERFORMANCE.md](./docs/PERFORMANCE.md)             |
-| Privacy and self hosting                                    | [docs/PRIVACY.md](./docs/PRIVACY.md)                     |
-| Local development and testing (including on a phone)        | [docs/LOCAL_TESTING.md](./docs/LOCAL_TESTING.md)         |
-| Dependency versions                                         | [docs/DEPENDENCIES.md](./docs/DEPENDENCIES.md)           |
-| React Native plan                                           | [docs/REACT_NATIVE_PLAN.md](./docs/REACT_NATIVE_PLAN.md) |
-| Publishing to npm (maintainers)                             | [docs/PUBLISHING.md](./docs/PUBLISHING.md)               |
+| Topic                                       | Link                                                     |
+| ------------------------------------------- | -------------------------------------------------------- |
+| Creating products and filters               | [docs/CREATING_PRODUCTS.md](./docs/CREATING_PRODUCTS.md) |
+| Manifest reference                          | [docs/MANIFEST_SPEC.md](./docs/MANIFEST_SPEC.md)         |
+| 3D and 2D asset authoring                   | [docs/ASSET_AUTHORING.md](./docs/ASSET_AUTHORING.md)     |
+| Theming and customization                   | [docs/THEMING.md](./docs/THEMING.md)                     |
+| Architecture and adding a product type      | [docs/ARCHITECTURE.md](./docs/ARCHITECTURE.md)           |
+| Performance                                 | [docs/PERFORMANCE.md](./docs/PERFORMANCE.md)             |
+| Privacy and self hosting                    | [docs/PRIVACY.md](./docs/PRIVACY.md)                     |
+| Running the examples and testing on a phone | [docs/LOCAL_TESTING.md](./docs/LOCAL_TESTING.md)         |
+
+Each package also has its own README with the full API: [react](./packages/react), [react-native](./packages/react-native), [web](./packages/web), [core](./packages/core).
 
 ## FAQ
 
-**Is TryOnIt really free for commercial use?**
-Yes. It is MIT licensed. Use it in commercial stores, client projects and SaaS products. MediaPipe (Apache 2.0) and its models are provided by Google: review the model cards for their terms.
+**Can I use it in a commercial store?**
+Yes. TryOnIt is MIT licensed. MediaPipe is Apache 2.0, and its models are provided by Google, so check their model cards for terms.
 
-**Does it need a backend or GPU server?**
-No. Everything runs in the shopper's browser. You only host static files (manifests, models, images).
-
-**Does it work on mobile?**
-Yes, on iOS Safari 16.4+ and modern Android browsers, with front and rear camera switching.
-
-**How accurate is the glasses size?**
-TryOnIt estimates real world scale from the iris diameter (about 11.7 mm on average) and corrects the 3D head pose, so a 140 mm frame authored in millimeters looks proportionate. You can tune the constant.
+**Do I need a backend?**
+No. You only host static files: manifests, models and images.
 
 **Can I use my own 3D models?**
-Yes. Any glTF or GLB file in millimeters. Draco, Meshopt and KTX2 compression are supported. See [docs/ASSET_AUTHORING.md](./docs/ASSET_AUTHORING.md).
+Yes, any glTF or GLB in millimeters. Draco, Meshopt and KTX2 compression are supported.
 
-**Is the clothing try-on realistic?**
-It is an experimental 2D overlay that warps a front facing garment image onto your torso. It is great for quick previews, not for fit. Photo real garment try-on needs server GPUs, which TryOnIt intentionally avoids.
+**How good is the clothing try-on?**
+It is an experimental 2D overlay that warps a front facing garment image onto your torso. Good for quick previews, not for fit.
 
-**Can I use it with Vue, Svelte or Angular?**
-Yes, through `@tryonit/web` and `mount()` or the imperative engine.
-
-**What about React Native and Expo?**
-Use [`@tryonit/react-native`](./packages/react-native). It works in Expo Go, Expo dev builds and bare React Native with the same manifests. A fully native engine is planned for even higher performance, see [docs/REACT_NATIVE_PLAN.md](./docs/REACT_NATIVE_PLAN.md).
+**Does it work on phones?**
+Yes. On the web it runs in iOS Safari 16.4+ and modern Android browsers, with front and rear camera switching. For native apps, use `@tryonit/react-native`.
 
 ## Roadmap
 
-- [x] Web engine, React components, makeup, hair, glasses, hats, earrings, watches, rings, stickers
+- [x] Web engine and React components: makeup, hair, glasses, hats, earrings, watches, rings, stickers
+- [x] `@tryonit/react-native` for Expo Go, Expo dev builds and bare React Native
 - [x] Experimental 2D clothing overlay
-- [ ] Web Worker tracking mode (planned, see `trackers/tracker.interface.ts`)
-- [x] `@tryonit/react-native` for Expo Go, Expo dev builds and bare React Native (WebView engine)
-- [ ] Fully native React Native engine with VisionCamera, native MediaPipe, Skia and Filament ([plan](./docs/REACT_NATIVE_PLAN.md))
-- [ ] Nail polish and contact lens asset types
-- [ ] Multi product layering (lipstick and glasses at the same time)
+- [ ] Tracking in a Web Worker
+- [ ] Fully native React Native engine behind the same API
+- [ ] Nail polish and contact lenses
+- [ ] Several products at once (lipstick and glasses together)
 
 ## Contributing
 
-Contributions are welcome. Start with [CONTRIBUTING.md](./CONTRIBUTING.md), run the playground with `pnpm setup:examples && pnpm dev`, and read [docs/ARCHITECTURE.md](./docs/ARCHITECTURE.md) before adding a new asset type.
+Bug reports, product type ideas and pull requests are welcome. [CONTRIBUTING.md](./CONTRIBUTING.md) explains the setup, branch and commit naming, and how a change gets released to npm.
+
+## Video walkthrough
+
+A short video that shows the packages, how to install and use them in React, Next.js, Remix and React Native, and how to create your own products:
+
+[![Add Virtual Try-On to React, Next.js, Remix or React Native in Minutes](https://img.youtube.com/vi/YaXDyYEVqko/maxresdefault.jpg)](https://youtu.be/YaXDyYEVqko)
+
+[Watch on YouTube](https://youtu.be/YaXDyYEVqko)
 
 ## License
 
-[MIT](./LICENSE). Sample assets in this repository are generated procedurally by `scripts/generate-sample-assets.mjs`, so they carry no third party licenses.
-
-<sub>Keywords: virtual try-on, AR try-on, augmented reality, WebAR, virtual makeup, lipstick try-on, glasses try-on, sunglasses try-on, eyewear AR, jewelry try-on, earrings try-on, watch try-on, ring try-on, hat try-on, hair color try-on, clothing try-on, face tracking, hand tracking, MediaPipe, three.js, WebGL, React, Next.js, Remix, Vue, Svelte, Angular, Shopify, e-commerce, open source, privacy first, client side.</sub>
+[MIT](./LICENSE). The sample products in this repository are generated by [`scripts/generate-sample-assets.mjs`](./scripts/generate-sample-assets.mjs), so they carry no third party licenses.
