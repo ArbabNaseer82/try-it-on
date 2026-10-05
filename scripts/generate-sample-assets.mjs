@@ -143,10 +143,10 @@ function cap() {
   group.name = 'cap';
   const fabric = plastic(0x1f3a8a, 0.8);
   const crown = new THREE.SphereGeometry(1, 48, 24, 0, Math.PI * 2, 0, Math.PI / 2);
-  group.add(mesh(crown, fabric, [0, -8, -88], [0, 0, 0], [86, 92, 102]));
+  group.add(mesh(crown, fabric, [0, -26, -92], [0, 0, 0], [92, 96, 108]));
   const brim = new THREE.CylinderGeometry(1, 1, 1, 48, 1, false, -Math.PI / 2, Math.PI);
-  group.add(mesh(brim, plastic(0x172554, 0.7), [0, -8, 6], [0.12, 0, 0], [80, 3, 82]));
-  group.add(mesh(new THREE.SphereGeometry(6, 16, 12), fabric, [0, 84, -88]));
+  group.add(mesh(brim, plastic(0x172554, 0.7), [0, -26, 6], [0.18, 0, 0], [84, 3, 86]));
+  group.add(mesh(new THREE.SphereGeometry(6, 16, 12), fabric, [0, 70, -92]));
   return group;
 }
 

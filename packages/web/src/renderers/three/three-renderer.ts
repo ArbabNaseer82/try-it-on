@@ -1,5 +1,6 @@
 import {
   DEFAULT_FOV_Y,
+  FACE_ANCHOR_DEFAULTS,
   clamp,
   type AnchorPose,
   type AssetManifest,
@@ -192,8 +193,9 @@ export class ThreeRenderer implements Renderer {
           const occ = face.anchors.occluder;
           this.headOccluder.position.set(...occ.position);
           this.headOccluder.quaternion.set(...occ.rotation);
-          // Radii follow FACE_ANCHOR_DEFAULTS.occluderRadii (cm), scaled with the face.
-          this.headOccluder.scale.set(7.6 * occ.scale, 11 * occ.scale, 10.5 * occ.scale);
+          // Radii come from FACE_ANCHOR_DEFAULTS.occluderRadii (cm), scaled with the face.
+          const [rx, ry, rz] = FACE_ANCHOR_DEFAULTS.occluderRadii;
+          this.headOccluder.scale.set(rx * occ.scale, ry * occ.scale, rz * occ.scale);
           this.headOccluder.visible = true;
         }
         return face.fade;

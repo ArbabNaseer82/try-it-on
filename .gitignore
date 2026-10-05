@@ -33,3 +33,6 @@ packages/*/LICENSE
 packages/react-native/src/generated/runtime.js
 examples/expo-app/.expo
 examples/expo-app/dist
+
+# Raw screen recordings and video production files (large, never committed)
+rawVideos/
