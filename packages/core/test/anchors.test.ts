@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import {
   DEFAULT_FOV_Y,
   FACE,
+  FACE_ANCHOR_DEFAULTS,
   computeBodyAnchors,
   computeFaceAnchors,
   computeHandAnchors,
@@ -63,8 +64,11 @@ describe('computeFaceAnchors', () => {
     expect(by).toBeCloseTo(0.44, 3);
     // Left ear is on the image right in an unmirrored frame.
     expect(a.leftEar.position[0]).toBeGreaterThan(a.rightEar.position[0]);
-    // Occluder sits behind the nose bridge.
+    // Occluder sits behind the nose bridge, and its front surface stays behind the eyes so it
+    // never hides the front of a glasses frame (which sits a few millimeters in front of the bridge).
     expect(a.occluder.position[2]).toBeLessThan(a.noseBridge.position[2]);
+    const front = a.occluder.position[2] + FACE_ANCHOR_DEFAULTS.occluderRadii[2];
+    expect(front).toBeLessThan(a.noseBridge.position[2] - 1);
     expect(a.faceWidth).toBeCloseTo(0.3);
     expect(a.overlay.noseTip.x).toBeCloseTo(0.5);
     expect(a.overlay.eyes.angle).toBeCloseTo(0);

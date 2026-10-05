@@ -35,8 +35,10 @@ export const FACE_ANCHOR_DEFAULTS: FaceAnchorConfig = {
   earLobeBlend: 0.55,
   earLobeOffset: [0, -0.6, -1.2],
   earHideYaw: 0.45,
-  occluderOffset: [0, 1.5, -9.5],
-  occluderRadii: [7.6, 11, 10.5],
+  // The ellipsoid front must stay behind the eyes (z = -1.5 cm from the nose bridge), otherwise
+  // it hides the middle of glasses frames. Back of the head at about -20.5 cm.
+  occluderOffset: [0, 1.5, -11],
+  occluderRadii: [7.4, 10.5, 9.5],
 };
 
 export interface FaceAnchors {
