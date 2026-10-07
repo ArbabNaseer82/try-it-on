@@ -55,7 +55,7 @@
     {
       "name": "@tryonit/core (entire public API)",
       "path": "packages/core/dist/index.js",
-      "limit": "14 KB",
+      "limit": "16 KB",
       "gzip": true
     },
     {

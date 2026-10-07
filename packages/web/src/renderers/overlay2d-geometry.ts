@@ -1,7 +1,11 @@
 import {
+  computeGarmentControls,
   computeHomography,
+  createMlsDeformer,
+  deformGrid,
   warpGrid,
   type Anchor2D,
+  type BodyRig,
   type ClothingAnchors,
   type TorsoQuad,
   type Vec2,
@@ -76,6 +80,44 @@ export function garmentMesh(
   );
   if (!h) return null;
   const grid = warpGrid(h, imageWidth, imageHeight, segments);
+  const positions = new Float32Array(grid.indices.length * 2);
+  const uvs = new Float32Array(grid.indices.length * 2);
+  grid.indices.forEach((index, i) => {
+    positions[i * 2] = grid.positions[index * 2] ?? 0;
+    positions[i * 2 + 1] = grid.positions[index * 2 + 1] ?? 0;
+    uvs[i * 2] = grid.uvs[index * 2] ?? 0;
+    uvs[i * 2 + 1] = grid.uvs[index * 2 + 1] ?? 0;
+  });
+  return { positions, uvs };
+}
+
+/**
+ * Fitted garment mesh: every garment point (neckline, shoulders, armpits, sleeves, waist, hem)
+ * is pinned to its body point and the image bends smoothly in between with a moving least
+ * squares warp. Sleeves follow the upper arms and the sides follow the body outline.
+ */
+export function fittedGarmentMesh(
+  anchors: ClothingAnchors,
+  rig: BodyRig,
+  imageWidth: number,
+  imageHeight: number,
+  frameWidth: number,
+  frameHeight: number,
+  fit = 1.06,
+  segments = 28,
+): OverlayMesh {
+  const { src, dst } = computeGarmentControls(anchors, rig, frameWidth, frameHeight, fit);
+  const deform = createMlsDeformer(src, dst);
+  const grid = deformGrid(
+    (p) => {
+      const [x, y] = deform(p);
+      return [x / frameWidth, y / frameHeight];
+    },
+    imageWidth,
+    imageHeight,
+    segments,
+    segments,
+  );
   const positions = new Float32Array(grid.indices.length * 2);
   const uvs = new Float32Array(grid.indices.length * 2);
   grid.indices.forEach((index, i) => {

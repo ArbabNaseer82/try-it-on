@@ -20,7 +20,7 @@ export const MANIFEST_DEFAULTS = {
   watch: { wristWidthMm: 60 },
   ring: { finger: 'ring', sizeMm: 18 },
   overlay2d: { anchor: 'noseBridge', scale: 1, offset: [0, 0], opacity: 1 },
-  clothing: { padding: 1.15, opacity: 1 },
+  clothing: { padding: 1.15, opacity: 1, fit: 1.06, shading: 0.6 },
 } as const;
 
 const D = MANIFEST_DEFAULTS;
@@ -107,10 +107,19 @@ const clothingShape = {
       rightShoulder: vec2,
       leftHip: vec2,
       rightHip: vec2,
+      neck: s.optional(vec2),
+      leftArmpit: s.optional(vec2),
+      rightArmpit: s.optional(vec2),
+      leftSleeve: s.optional(vec2),
+      rightSleeve: s.optional(vec2),
+      leftWaist: s.optional(vec2),
+      rightWaist: s.optional(vec2),
     },
     { strict: true },
   ),
   padding: s.optional(s.number({ min: 0.5, max: 3 }), D.clothing.padding as number),
+  fit: s.optional(s.number({ min: 0.8, max: 1.6 }), D.clothing.fit as number),
+  shading: unit(D.clothing.shading),
   opacity: unit(D.clothing.opacity),
 };
 

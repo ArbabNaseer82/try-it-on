@@ -1140,7 +1140,7 @@
     },
     {
       "title": "clothing.top",
-      "description": "EXPERIMENTAL. Front facing garment PNG warped onto the torso.",
+      "description": "EXPERIMENTAL. Front facing garment PNG. With only the four corners it is warped onto the torso; with the optional points the sleeves follow the arms and the sides follow the body outline.",
       "type": "object",
       "additionalProperties": false,
       "required": ["version", "id", "type", "image", "anchors"],
@@ -1223,6 +1223,69 @@
                         },
                         "minItems": 2,
                         "maxItems": 2
+                      },
+                      "neck": {
+                        "type": "array",
+                        "items": {
+                          "type": "number"
+                        },
+                        "minItems": 2,
+                        "maxItems": 2,
+                        "description": "Center front of the neckline (fitted mode)."
+                      },
+                      "leftArmpit": {
+                        "type": "array",
+                        "items": {
+                          "type": "number"
+                        },
+                        "minItems": 2,
+                        "maxItems": 2,
+                        "description": "Where the left sleeve meets the side seam (fitted mode)."
+                      },
+                      "rightArmpit": {
+                        "type": "array",
+                        "items": {
+                          "type": "number"
+                        },
+                        "minItems": 2,
+                        "maxItems": 2,
+                        "description": "Where the right sleeve meets the side seam (fitted mode)."
+                      },
+                      "leftSleeve": {
+                        "type": "array",
+                        "items": {
+                          "type": "number"
+                        },
+                        "minItems": 2,
+                        "maxItems": 2,
+                        "description": "Center of the left sleeve opening (fitted mode)."
+                      },
+                      "rightSleeve": {
+                        "type": "array",
+                        "items": {
+                          "type": "number"
+                        },
+                        "minItems": 2,
+                        "maxItems": 2,
+                        "description": "Center of the right sleeve opening (fitted mode)."
+                      },
+                      "leftWaist": {
+                        "type": "array",
+                        "items": {
+                          "type": "number"
+                        },
+                        "minItems": 2,
+                        "maxItems": 2,
+                        "description": "Narrowest point of the left side seam (fitted mode)."
+                      },
+                      "rightWaist": {
+                        "type": "array",
+                        "items": {
+                          "type": "number"
+                        },
+                        "minItems": 2,
+                        "maxItems": 2,
+                        "description": "Narrowest point of the right side seam (fitted mode)."
                       }
                     }
                   },
@@ -1231,6 +1294,20 @@
                     "minimum": 0.5,
                     "maximum": 3,
                     "default": 1.15
+                  },
+                  "fit": {
+                    "type": "number",
+                    "minimum": 0.8,
+                    "maximum": 1.6,
+                    "default": 1.06,
+                    "description": "Fitted mode: how loose the garment sits around the body (1 follows the outline)."
+                  },
+                  "shading": {
+                    "type": "number",
+                    "minimum": 0,
+                    "maximum": 1,
+                    "default": 0.6,
+                    "description": "Fitted mode: how much of the light and folds under the garment show through."
                   },
                   "opacity": {
                     "type": "number",
@@ -1282,6 +1359,69 @@
               },
               "minItems": 2,
               "maxItems": 2
+            },
+            "neck": {
+              "type": "array",
+              "items": {
+                "type": "number"
+              },
+              "minItems": 2,
+              "maxItems": 2,
+              "description": "Center front of the neckline (fitted mode)."
+            },
+            "leftArmpit": {
+              "type": "array",
+              "items": {
+                "type": "number"
+              },
+              "minItems": 2,
+              "maxItems": 2,
+              "description": "Where the left sleeve meets the side seam (fitted mode)."
+            },
+            "rightArmpit": {
+              "type": "array",
+              "items": {
+                "type": "number"
+              },
+              "minItems": 2,
+              "maxItems": 2,
+              "description": "Where the right sleeve meets the side seam (fitted mode)."
+            },
+            "leftSleeve": {
+              "type": "array",
+              "items": {
+                "type": "number"
+              },
+              "minItems": 2,
+              "maxItems": 2,
+              "description": "Center of the left sleeve opening (fitted mode)."
+            },
+            "rightSleeve": {
+              "type": "array",
+              "items": {
+                "type": "number"
+              },
+              "minItems": 2,
+              "maxItems": 2,
+              "description": "Center of the right sleeve opening (fitted mode)."
+            },
+            "leftWaist": {
+              "type": "array",
+              "items": {
+                "type": "number"
+              },
+              "minItems": 2,
+              "maxItems": 2,
+              "description": "Narrowest point of the left side seam (fitted mode)."
+            },
+            "rightWaist": {
+              "type": "array",
+              "items": {
+                "type": "number"
+              },
+              "minItems": 2,
+              "maxItems": 2,
+              "description": "Narrowest point of the right side seam (fitted mode)."
             }
           }
         },
@@ -1290,6 +1430,20 @@
           "minimum": 0.5,
           "maximum": 3,
           "default": 1.15
+        },
+        "fit": {
+          "type": "number",
+          "minimum": 0.8,
+          "maximum": 1.6,
+          "default": 1.06,
+          "description": "Fitted mode: how loose the garment sits around the body (1 follows the outline)."
+        },
+        "shading": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1,
+          "default": 0.6,
+          "description": "Fitted mode: how much of the light and folds under the garment show through."
         },
         "opacity": {
           "type": "number",

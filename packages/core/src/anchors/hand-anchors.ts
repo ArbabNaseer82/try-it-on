@@ -13,11 +13,17 @@ export interface HandAnchorConfig {
    * TryOnIt feeds unmirrored frames, so labels are swapped by default.
    */
   handednessFromMirroredInput: boolean;
+  /**
+   * How much the back of the hand turns away from the camera because of depth (0) or stays
+   * facing it (1). Single camera depth is the noisiest signal, so the default keeps a fifth of it.
+   */
+  depthDamping: number;
 }
 
 export const HAND_ANCHOR_DEFAULTS: HandAnchorConfig = {
   ringPosition: 0.4,
   handednessFromMirroredInput: true,
+  depthDamping: 0.8,
 };
 
 export interface HandAnchors {
@@ -89,11 +95,22 @@ export function computeHandAnchors(
   const label = hand.handedness;
   const isRight = config.handednessFromMirroredInput ? label === 'Left' : label === 'Right';
 
-  const yAxis = normalize3(sub3(world(HAND.MIDDLE_MCP), world(HAND.WRIST)));
+  const yRaw = normalize3(sub3(world(HAND.MIDDLE_MCP), world(HAND.WRIST)));
+  // Trackers see the camera image un-mirrored: on the back of a right hand the index knuckle is
+  // on the image right. Crossing the knuckle line with the finger direction then points Z out of
+  // the back of the hand, toward the camera, which is where a watch face sits.
   const across = isRight
-    ? sub3(world(HAND.PINKY_MCP), world(HAND.INDEX_MCP))
-    : sub3(world(HAND.INDEX_MCP), world(HAND.PINKY_MCP));
-  const zAxis = normalize3(cross3(across, yAxis));
+    ? sub3(world(HAND.INDEX_MCP), world(HAND.PINKY_MCP))
+    : sub3(world(HAND.PINKY_MCP), world(HAND.INDEX_MCP));
+  const zRaw = normalize3(cross3(across, yRaw));
+  // Depth from a single camera is the noisiest part of the hand pose. Pull the back of the hand
+  // toward the line of sight (wrist to camera, the camera sits at the origin), keeping whichever
+  // side faces it, then square the finger direction against it so it keeps its on-screen angle.
+  const wristPosition = image(HAND.WRIST);
+  const sight = normalize3(scale3(wristPosition, -1));
+  const facing = dot3(zRaw, sight) < 0 ? scale3(sight, -1) : sight;
+  const zAxis = normalize3(lerp3(zRaw, facing, config.depthDamping));
+  const yAxis = normalize3(sub3(yRaw, scale3(zAxis, dot3(yRaw, zAxis))));
   const xAxis = cross3(yAxis, zAxis);
   const palmRotation = quatFromBasis(xAxis, yAxis, zAxis);
 
@@ -107,7 +124,7 @@ export function computeHandAnchors(
   };
 
   return {
-    wrist: { position: image(HAND.WRIST), rotation: palmRotation, scale: 1 },
+    wrist: { position: wristPosition, rotation: palmRotation, scale: 1 },
     rings: {
       index: fingerPose('index'),
       middle: fingerPose('middle'),

@@ -11,6 +11,7 @@ import {
   estimateMetricScale,
   type AnchorPose,
   type BodyAnchors,
+  type BodyRig,
   type FaceAnchors,
   type FaceResult,
   type HandAnchors,
@@ -79,6 +80,7 @@ export class TrackingPipeline {
   private readonly facePoses = new Map<PoseKeys, PoseFilter>();
   private readonly handPoses = new Map<'wrist' | RingKeys, PoseFilter>();
   private readonly bodyFilter: VectorFilter;
+  private readonly rigFilter: VectorFilter;
   private readonly scaleFilter = new OneEuroFilter({ minCutoff: 0.3, beta: 0 });
   private readonly settings: Record<SmoothingCategory, OneEuroOptions>;
   /** When true (photo mode) results are not smoothed and never fade. */
@@ -88,6 +90,7 @@ export class TrackingPipeline {
     this.settings = { ...SMOOTHING_DEFAULTS, ...options.smoothing };
     this.faceSmoother = new LandmarkSmoother(this.settings.makeup);
     this.bodyFilter = new VectorFilter(this.settings.body);
+    this.rigFilter = new VectorFilter(this.settings.body);
   }
 
   reset(): void {
@@ -95,6 +98,7 @@ export class TrackingPipeline {
     this.facePoses.forEach((f) => f.reset());
     this.handPoses.forEach((f) => f.reset());
     this.bodyFilter.reset();
+    this.rigFilter.reset();
     this.scaleFilter.reset();
     for (const kind of ['face', 'hand', 'body'] as const) this.setVisible(kind, false);
     this.face = newTrack();
@@ -195,6 +199,7 @@ export class TrackingPipeline {
         rightHip: v(6),
       };
       anchors.torso = torso;
+      anchors.rig = unflattenRig(this.rigFilter.filter(flattenRig(anchors.rig), t), anchors.rig);
     }
     this.body.value = anchors;
     this.body.lastSeen = t;
@@ -245,4 +250,38 @@ export class TrackingPipeline {
   get faceLandmarks(): Landmark[] | null {
     return this.face.value?.landmarks ?? null;
   }
+}
+
+/** Rig points as one flat number list, in a fixed order, for smoothing. */
+function flattenRig(rig: BodyRig): number[] {
+  const points = [
+    rig.neck,
+    rig.leftShoulder,
+    rig.rightShoulder,
+    rig.leftElbow,
+    rig.rightElbow,
+    rig.leftHip,
+    rig.rightHip,
+    ...rig.leftSide,
+    ...rig.rightSide,
+  ];
+  return points.flat();
+}
+
+function unflattenRig(values: number[], like: BodyRig): BodyRig {
+  let i = 0;
+  const next = (): Vec2 => [values[i++] as number, values[i++] as number];
+  return {
+    neck: next(),
+    leftShoulder: next(),
+    rightShoulder: next(),
+    leftElbow: next(),
+    rightElbow: next(),
+    leftHip: next(),
+    rightHip: next(),
+    levels: like.levels,
+    leftSide: like.leftSide.map(next),
+    rightSide: like.rightSide.map(next),
+    measured: like.measured,
+  };
 }
