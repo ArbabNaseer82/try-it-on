@@ -1,6 +1,6 @@
 {
   "name": "@tryonit/react-native",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "description": "Virtual try-on for React Native and Expo (Expo Go, dev builds and bare apps): makeup, beauty filters, face stickers, glasses, hats, earrings, watches, rings and hair color on the phone camera. Same asset manifests as TryOnIt for the web. Free, open source, on device.",
   "license": "MIT",
   "author": "arbab-naseer (https://github.com/ArbabNaseer82)",

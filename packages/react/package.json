@@ -1,6 +1,6 @@
 {
   "name": "@tryonit/react",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "React components and hooks for TryOnIt, the free open-source virtual try-on SDK. Drop-in <TryOnButton> for e-commerce product pages: virtual makeup, glasses, hats, jewelry, watches and clothing. Works with Next.js, Remix and Vite. Fully themeable and headless.",
   "license": "MIT",
   "author": "arbab-naseer (https://github.com/ArbabNaseer82)",
