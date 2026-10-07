@@ -1,12 +1,18 @@
 import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
-import { ErrorCode, validateManifest, type MakeupLayer } from '@tryonit/core';
+import {
+  ErrorCode,
+  computeBodyRig,
+  validateManifest,
+  type Landmark,
+  type MakeupLayer,
+} from '@tryonit/core';
 import { DEFAULT_MODEL_URLS, MEDIAPIPE_VERSION, getModelUrl } from '../src/config';
 import { assertCapabilities, detectCapabilities } from '../src/engine/capabilities';
 import { mapCameraError } from '../src/camera/camera-source';
 import { AdaptiveRate } from '../src/engine/frame-loop';
 import { buildLayerGeometry } from '../src/renderers/makeup-geometry';
-import { garmentMesh, stickerQuad } from '../src/renderers/overlay2d-geometry';
+import { fittedGarmentMesh, garmentMesh, stickerQuad } from '../src/renderers/overlay2d-geometry';
 import { toMakeupLayers } from '../src/renderers/makeup-renderer';
 import { syntheticFace } from './synthetic-face';
 
@@ -206,5 +212,48 @@ describe('overlay geometry', () => {
         1,
       ),
     ).toBeNull();
+  });
+
+  it('fitted garment mesh follows the arms and covers the torso', () => {
+    const pose = (elbowX: number, elbowY: number) => {
+      const landmarks: Landmark[] = Array.from({ length: 33 }, () => ({
+        x: 0.5,
+        y: 0.5,
+        z: 0,
+        visibility: 0.9,
+      }));
+      const set = (i: number, x: number, y: number) =>
+        (landmarks[i] = { x, y, z: 0, visibility: 0.9 });
+      set(11, 0.62, 0.3);
+      set(12, 0.38, 0.3);
+      set(13, elbowX, elbowY);
+      set(14, 0.34, 0.5);
+      set(23, 0.57, 0.7);
+      set(24, 0.43, 0.7);
+      return computeBodyRig({ landmarks, worldLandmarks: landmarks }, 1);
+    };
+    const anchors = {
+      leftShoulder: [352, 78] as [number, number],
+      rightShoulder: [160, 78] as [number, number],
+      leftHip: [378, 560] as [number, number],
+      rightHip: [134, 560] as [number, number],
+      neck: [256, 76] as [number, number],
+      leftArmpit: [380, 205] as [number, number],
+      rightArmpit: [132, 205] as [number, number],
+      leftSleeve: [450, 192] as [number, number],
+      rightSleeve: [62, 192] as [number, number],
+    };
+    const down = fittedGarmentMesh(anchors, pose(0.66, 0.5), 512, 600, 1000, 1000, 1, 16);
+    const raised = fittedGarmentMesh(anchors, pose(0.85, 0.3), 512, 600, 1000, 1000, 1, 16);
+    expect(down.positions.length).toBe(16 * 16 * 6 * 2);
+    // Chest center stays put; the left sleeve corner (top right of the image) moves with the arm.
+    const vertex = (m: typeof down, u: number, v: number): [number, number] => {
+      for (let i = 0; i < m.uvs.length; i += 2)
+        if (Math.abs(m.uvs[i]! - u) < 1e-6 && Math.abs(m.uvs[i + 1]! - v) < 1e-6)
+          return [m.positions[i]!, m.positions[i + 1]!];
+      throw new Error('no vertex');
+    };
+    expect(Math.abs(vertex(raised, 0.5, 0.5)[0] - vertex(down, 0.5, 0.5)[0])).toBeLessThan(0.03);
+    expect(vertex(raised, 1, 0.3125)[1]).toBeLessThan(vertex(down, 1, 0.3125)[1] - 0.03);
   });
 });

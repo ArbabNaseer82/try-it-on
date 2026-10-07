@@ -7,13 +7,13 @@ TryOnIt is built to keep product pages fast. Nothing heavy loads until a shopper
 | Entry                                                                                      | Budget | Measured      |
 | ------------------------------------------------------------------------------------------ | ------ | ------------- |
 | `@tryonit/core`, typical import (`validateManifest`, `createSessionStore`, `resolveAsset`) | 8 KB   | about 5.9 KB  |
-| `@tryonit/core`, entire public API                                                         | 14 KB  | about 12.9 KB |
-| `@tryonit/web` initial entry, excluding MediaPipe and three.js (both lazy)                 | 25 KB  | about 22.6 KB |
+| `@tryonit/core`, entire public API                                                         | 16 KB  | about 14.8 KB |
+| `@tryonit/web` initial entry, excluding MediaPipe and three.js (both lazy)                 | 25 KB  | about 23.5 KB |
 | `@tryonit/react`                                                                           | 15 KB  | about 7.9 KB  |
 | `@tryonit/react/styles.css`                                                                | 6 KB   | about 2.5 KB  |
 | `@tryonit/web/styles.css` (vanilla `mount()`)                                              | 3 KB   | about 0.9 KB  |
 
-**Note on the core budget.** The original target was 8 KB for the whole core. Measuring every export at once (validator for 15 asset types, anchors, filters, homography, resolver) gives about 12.9 KB, so the "entire API" budget is 14 KB, and a second check keeps the typical tree-shaken import under the original 8 KB. Apps only pay for what they import.
+**Note on the core budget.** The original target was 8 KB for the whole core. Measuring every export at once (validator for 15 asset types, anchors, filters, homography, fitted garment warp, resolver) gives about 14.8 KB, so the "entire API" budget is 16 KB, and a second check keeps the typical tree-shaken import under the original 8 KB. Apps only pay for what they import.
 
 ## Lazy chunks
 

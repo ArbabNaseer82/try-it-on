@@ -171,19 +171,19 @@ engine.destroy();
 
 Each product is a small JSON file (or a JS object) called an asset manifest. Makeup and hair only need colors. 3D products point to a GLB model, stickers to a PNG.
 
-| Product                                       | `type`                                                                                     | Tracking           | You provide             | Status       |
-| --------------------------------------------- | ------------------------------------------------------------------------------------------ | ------------------ | ----------------------- | ------------ |
-| Lipstick, lip gloss                           | `makeup.lips`                                                                              | Face               | colors                  | Stable       |
-| Blush, eyeshadow, eyeliner, brows, foundation | `makeup.blush`, `makeup.eyeshadow`, `makeup.eyeliner`, `makeup.brows`, `makeup.foundation` | Face               | colors                  | Stable       |
-| Full makeup look                              | `makeup.look`                                                                              | Face               | colors                  | Stable       |
-| Hair color                                    | `hair.color`                                                                               | Hair segmentation  | a color                 | Stable       |
-| Glasses, sunglasses                           | `glasses`                                                                                  | Face and head pose | GLB in millimeters      | Stable       |
-| Hats, caps                                    | `hat`                                                                                      | Face and head pose | GLB in millimeters      | Stable       |
-| Earrings                                      | `earrings`                                                                                 | Face               | GLB in millimeters      | Stable       |
-| Face stickers, masks                          | `face.overlay2d`                                                                           | Face               | transparent PNG         | Stable       |
-| Watches, bracelets                            | `watch`                                                                                    | Hand               | GLB in millimeters      | Stable       |
-| Rings                                         | `ring`                                                                                     | Hand               | GLB in millimeters      | Stable       |
-| T-shirts, tops                                | `clothing.top`                                                                             | Body pose          | PNG and 4 anchor points | Experimental |
+| Product                                       | `type`                                                                                     | Tracking              | You provide            | Status       |
+| --------------------------------------------- | ------------------------------------------------------------------------------------------ | --------------------- | ---------------------- | ------------ |
+| Lipstick, lip gloss                           | `makeup.lips`                                                                              | Face                  | colors                 | Stable       |
+| Blush, eyeshadow, eyeliner, brows, foundation | `makeup.blush`, `makeup.eyeshadow`, `makeup.eyeliner`, `makeup.brows`, `makeup.foundation` | Face                  | colors                 | Stable       |
+| Full makeup look                              | `makeup.look`                                                                              | Face                  | colors                 | Stable       |
+| Hair color                                    | `hair.color`                                                                               | Hair segmentation     | a color                | Stable       |
+| Glasses, sunglasses                           | `glasses`                                                                                  | Face and head pose    | GLB in millimeters     | Stable       |
+| Hats, caps                                    | `hat`                                                                                      | Face and head pose    | GLB in millimeters     | Stable       |
+| Earrings                                      | `earrings`                                                                                 | Face                  | GLB in millimeters     | Stable       |
+| Face stickers, masks                          | `face.overlay2d`                                                                           | Face                  | transparent PNG        | Stable       |
+| Watches, bracelets                            | `watch`                                                                                    | Hand                  | GLB in millimeters     | Stable       |
+| Rings                                         | `ring`                                                                                     | Hand                  | GLB in millimeters     | Stable       |
+| T-shirts, tops                                | `clothing.top`                                                                             | Body pose and outline | PNG and 4 to 11 points | Experimental |
 
 A lipstick with three shades:
 
@@ -328,7 +328,7 @@ The full design is in [docs/ARCHITECTURE.md](./docs/ARCHITECTURE.md).
 | Bundle (min + gzip)                                                            | Size          | Budget |
 | ------------------------------------------------------------------------------ | ------------- | ------ |
 | `@tryonit/core`, typical import                                                | about 5.9 KB  | 8 KB   |
-| `@tryonit/web` initial entry (trackers, renderers and three.js load on demand) | about 22.6 KB | 25 KB  |
+| `@tryonit/web` initial entry (trackers, renderers and three.js load on demand) | about 23.5 KB | 25 KB  |
 | `@tryonit/react`                                                               | about 7.9 KB  | 15 KB  |
 | `@tryonit/react/styles.css`                                                    | about 2.5 KB  | 6 KB   |
 
@@ -376,7 +376,7 @@ No. You only host static files: manifests, models and images.
 Yes, any glTF or GLB in millimeters. Draco, Meshopt and KTX2 compression are supported.
 
 **How good is the clothing try-on?**
-It is an experimental 2D overlay that warps a front facing garment image onto your torso. Good for quick previews, not for fit.
+It is experimental and 2D: a front facing garment photo is fitted to your shoulders, arms, waist and body outline, and picks up the light and folds of what you have on. Good for previews and campaigns, not for checking size.
 
 **Does it work on phones?**
 Yes. On the web it runs in iOS Safari 16.4+ and modern Android browsers, with front and rear camera switching. For native apps, use `@tryonit/react-native`.

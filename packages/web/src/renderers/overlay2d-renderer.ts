@@ -1,16 +1,22 @@
 import type { AssetManifest, ClothingTopAsset, FaceOverlay2DAsset } from '@tryonit/core';
-import { ErrorCode, TryOnError } from '@tryonit/core';
+import { ErrorCode, TryOnError, isFittedGarment } from '@tryonit/core';
 import { createProgram, type Program } from './gl/program';
-import { OVERLAY_FRAG, OVERLAY_VERT } from './gl/shaders/overlay.glsl';
+import { CLOTH_FRAG, OVERLAY_FRAG, OVERLAY_VERT } from './gl/shaders/overlay.glsl';
 import { ATTR, type GLStage } from './gl/stage';
 import { createTexture, uploadImage } from './gl/texture';
-import { garmentMesh, stickerQuad, type OverlayMesh } from './overlay2d-geometry';
+import {
+  fittedGarmentMesh,
+  garmentMesh,
+  stickerQuad,
+  type OverlayMesh,
+} from './overlay2d-geometry';
 import { loadImage, type FrameState, type Renderer } from './renderer.interface';
 
-/** Flat PNG overlays: face stickers and the experimental clothing warp. */
+/** Flat PNG overlays: face stickers and garments (four point warp or fitted to the body). */
 export class Overlay2DRenderer implements Renderer {
   readonly kind = 'overlay2d' as const;
   private readonly program: Program;
+  private readonly cloth: Program;
   private readonly texture: WebGLTexture;
   private readonly vao: WebGLVertexArrayObject;
   private readonly posBuffer: WebGLBuffer;
@@ -22,6 +28,7 @@ export class Overlay2DRenderer implements Renderer {
   constructor(private readonly stage: GLStage) {
     const gl = stage.gl;
     this.program = createProgram(gl, OVERLAY_VERT, OVERLAY_FRAG, ATTR);
+    this.cloth = createProgram(gl, OVERLAY_VERT, CLOTH_FRAG, ATTR);
     this.texture = createTexture(gl);
     const vao = gl.createVertexArray();
     const pos = gl.createBuffer();
@@ -85,6 +92,20 @@ export class Overlay2DRenderer implements Renderer {
       };
     }
     if (!frame.body || !frame.body.anchors.visible) return null;
+    if (isFittedGarment(asset.anchors)) {
+      return {
+        mesh: fittedGarmentMesh(
+          asset.anchors,
+          frame.body.anchors.rig,
+          this.imageSize[0],
+          this.imageSize[1],
+          frame.width,
+          frame.height,
+          asset.fit ?? 1.06,
+        ),
+        fade: frame.body.fade,
+      };
+    }
     const mesh = garmentMesh(
       asset.anchors,
       frame.body.anchors.torso,
@@ -102,13 +123,25 @@ export class Overlay2DRenderer implements Renderer {
     const result = this.mesh(frame);
     if (!result || !this.asset) return;
     const { mesh, fade } = result;
+    const asset = this.asset;
+    const fitted = asset.type === 'clothing.top' && isFittedGarment(asset.anchors);
+    const active = fitted ? this.cloth : program;
     gl.enable(gl.BLEND);
     gl.blendFunc(gl.ONE, gl.ONE_MINUS_SRC_ALPHA);
-    program.use();
+    active.use();
     gl.activeTexture(gl.TEXTURE0);
     gl.bindTexture(gl.TEXTURE_2D, this.texture);
-    gl.uniform1i(program.uniform('u_tex'), 0);
-    gl.uniform1f(program.uniform('u_opacity'), (this.asset.opacity ?? 1) * frame.intensity * fade);
+    gl.uniform1i(active.uniform('u_tex'), 0);
+    gl.uniform1f(active.uniform('u_opacity'), (asset.opacity ?? 1) * frame.intensity * fade);
+    if (fitted) {
+      // The frame under the garment provides its light and folds.
+      gl.activeTexture(gl.TEXTURE1);
+      gl.bindTexture(gl.TEXTURE_2D, stage.frameTexture);
+      gl.uniform1i(active.uniform('u_frame'), 1);
+      gl.uniform1f(active.uniform('u_shading'), asset.shading ?? 0.6);
+      gl.uniform1f(active.uniform('u_aspect'), frame.width / frame.height);
+      gl.activeTexture(gl.TEXTURE0);
+    }
     gl.bindVertexArray(this.vao);
     gl.bindBuffer(gl.ARRAY_BUFFER, this.posBuffer);
     gl.bufferData(gl.ARRAY_BUFFER, mesh.positions, gl.DYNAMIC_DRAW);
@@ -122,6 +155,7 @@ export class Overlay2DRenderer implements Renderer {
   dispose(): void {
     const gl = this.stage.gl;
     this.program.dispose();
+    this.cloth.dispose();
     gl.deleteTexture(this.texture);
     gl.deleteBuffer(this.posBuffer);
     gl.deleteBuffer(this.uvBuffer);

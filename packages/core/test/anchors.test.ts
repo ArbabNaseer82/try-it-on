@@ -122,6 +122,40 @@ describe('computeHandAnchors', () => {
     expect(wy).toBeCloseTo(0.8, 3);
   });
 
+  it('points Z out of the back of a left hand too (regression: watches sat on the palm side)', () => {
+    // The same hand mirrored is a left hand seen from the back. The tracker labels it Right
+    // because it assumes mirrored input.
+    const left: HandResult = {
+      handedness: 'Right',
+      landmarks: result.landmarks.map((l) => ({ ...l, x: 1 - l.x })),
+      worldLandmarks: result.worldLandmarks.map((l) => ({ ...l, x: -l.x })),
+    };
+    const a = computeHandAnchors(left, { camera })!;
+    expect(a.side).toBe('left');
+    expect(quatRotateVec3(a.wrist.rotation, [0, 0, 1])[2]).toBeGreaterThan(0.9);
+    expect(quatRotateVec3(a.wrist.rotation, [0, 1, 0])[1]).toBeGreaterThan(0.9);
+  });
+
+  it('damps the turn that comes from noisy depth', () => {
+    // Pinky knuckle reported 3 cm deeper than the index knuckle.
+    const twisted: HandResult = {
+      ...result,
+      worldLandmarks: result.worldLandmarks.map((l, i) => ({
+        ...l,
+        z: [13, 17, 18, 19, 20].includes(i) ? 0.03 : l.z,
+      })),
+    };
+    const raw = computeHandAnchors(twisted, { camera, config: { depthDamping: 0 } })!;
+    const damped = computeHandAnchors(twisted, { camera })!;
+    // Alignment of the back of the hand with the line of sight from the wrist to the camera.
+    const facing = (h: typeof raw) => {
+      const z = quatRotateVec3(h.wrist.rotation, [0, 0, 1]);
+      const p = h.wrist.position;
+      return -(z[0] * p[0] + z[1] * p[1] + z[2] * p[2]) / Math.hypot(...p);
+    };
+    expect(facing(damped)).toBeGreaterThan(facing(raw) + 0.05);
+  });
+
   it('places rings between the base and first joint', () => {
     const a = computeHandAnchors(result, { camera })!;
     const [, ry] = project(camera, a.rings.ring.position);

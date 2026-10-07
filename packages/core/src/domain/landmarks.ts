@@ -99,6 +99,8 @@ export const FINGER_SEGMENTS = {
 
 export const POSE = {
   NOSE: 0,
+  MOUTH_LEFT: 9,
+  MOUTH_RIGHT: 10,
   LEFT_SHOULDER: 11,
   RIGHT_SHOULDER: 12,
   LEFT_ELBOW: 13,

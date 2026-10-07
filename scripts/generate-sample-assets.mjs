@@ -90,6 +90,13 @@ function glasses({ name, rimShape, frame, lensColor, lensOpacity }) {
       mesh(new THREE.BoxGeometry(2, 3.5, 135), frame, [side * 69, 2, -64], [0, side * 0.04, 0]),
     );
     group.add(mesh(new THREE.BoxGeometry(4, 6, 4), frame, [side * 68, 2, 2]));
+    // End piece joining the rim to the hinge, measured at hinge height (rim local y = 6).
+    const outline = shape.outer.getPoints(256).filter((p) => Math.abs(p.y - 6) < 1.5);
+    const edge = lensCenterX + Math.max(...outline.map((p) => p.x)) - 1.5;
+    const length = 67 - edge;
+    group.add(
+      mesh(new THREE.BoxGeometry(length, 4, 3), frame, [side * (edge + length / 2), 2, 3.6]),
+    );
   }
   // Bridge.
   group.add(mesh(new THREE.TorusGeometry(9, 1.3, 12, 24, Math.PI), frame, [0, -1, 4.2], [0, 0, 0]));
@@ -350,6 +357,14 @@ function tshirt(base) {
       rightShoulder: [160, 78],
       leftHip: [378, 560],
       rightHip: [134, 560],
+      // Fitted mode: sleeves follow the arms and the sides follow the body.
+      neck: [256, 76],
+      leftArmpit: [380, 205],
+      rightArmpit: [132, 205],
+      leftSleeve: [450, 192],
+      rightSleeve: [62, 192],
+      leftWaist: [383, 400],
+      rightWaist: [130, 400],
     },
   };
 }

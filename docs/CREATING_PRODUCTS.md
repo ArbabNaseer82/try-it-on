@@ -25,20 +25,20 @@ This guide is for anyone who uses TryOnIt in their own store or app and wants to
 
 ## 1. What you need for each kind of product
 
-| You want                                      | `type`                                                                                     | Files you provide         | Format                                      | Typical tools                                |
-| --------------------------------------------- | ------------------------------------------------------------------------------------------ | ------------------------- | ------------------------------------------- | -------------------------------------------- |
-| Lipstick, gloss                               | `makeup.lips`                                                                              | none, only colors         | JSON                                        | any text editor                              |
-| Blush, eyeshadow, eyeliner, brows, foundation | `makeup.blush`, `makeup.eyeshadow`, `makeup.eyeliner`, `makeup.brows`, `makeup.foundation` | none                      | JSON                                        | text editor                                  |
-| Beauty filter, full makeup look               | `makeup.look`                                                                              | none                      | JSON                                        | text editor                                  |
-| Hair color                                    | `hair.color`                                                                               | none                      | JSON                                        | text editor                                  |
-| Fun filter, sticker, mask, moustache, crown   | `face.overlay2d`                                                                           | 1 image                   | PNG with transparent background             | Figma, Canva, Photoshop, Procreate, Inkscape |
-| Glasses, sunglasses                           | `glasses`                                                                                  | 1 3D model                | GLB (binary glTF 2.0), millimeters          | Blender, CAD export, purchased model         |
-| Hats, caps                                    | `hat`                                                                                      | 1 3D model                | GLB                                         | Blender                                      |
-| Earrings                                      | `earrings`                                                                                 | 1 3D model (one earring)  | GLB                                         | Blender                                      |
-| Watches, bracelets                            | `watch`                                                                                    | 1 3D model                | GLB                                         | Blender                                      |
-| Rings                                         | `ring`                                                                                     | 1 3D model                | GLB                                         | Blender, jewelry CAD (Rhino, Matrix)         |
-| T-shirts, tops (experimental)                 | `clothing.top`                                                                             | 1 image + 4 anchor points | PNG with transparent background             | photo + background removal                   |
-| Product thumbnail (optional, any type)        | field `thumbnail`                                                                          | 1 image                   | PNG, JPG, WebP or SVG, square, about 128 px | any                                          |
+| You want                                      | `type`                                                                                     | Files you provide        | Format                                      | Typical tools                                |
+| --------------------------------------------- | ------------------------------------------------------------------------------------------ | ------------------------ | ------------------------------------------- | -------------------------------------------- |
+| Lipstick, gloss                               | `makeup.lips`                                                                              | none, only colors        | JSON                                        | any text editor                              |
+| Blush, eyeshadow, eyeliner, brows, foundation | `makeup.blush`, `makeup.eyeshadow`, `makeup.eyeliner`, `makeup.brows`, `makeup.foundation` | none                     | JSON                                        | text editor                                  |
+| Beauty filter, full makeup look               | `makeup.look`                                                                              | none                     | JSON                                        | text editor                                  |
+| Hair color                                    | `hair.color`                                                                               | none                     | JSON                                        | text editor                                  |
+| Fun filter, sticker, mask, moustache, crown   | `face.overlay2d`                                                                           | 1 image                  | PNG with transparent background             | Figma, Canva, Photoshop, Procreate, Inkscape |
+| Glasses, sunglasses                           | `glasses`                                                                                  | 1 3D model               | GLB (binary glTF 2.0), millimeters          | Blender, CAD export, purchased model         |
+| Hats, caps                                    | `hat`                                                                                      | 1 3D model               | GLB                                         | Blender                                      |
+| Earrings                                      | `earrings`                                                                                 | 1 3D model (one earring) | GLB                                         | Blender                                      |
+| Watches, bracelets                            | `watch`                                                                                    | 1 3D model               | GLB                                         | Blender                                      |
+| Rings                                         | `ring`                                                                                     | 1 3D model               | GLB                                         | Blender, jewelry CAD (Rhino, Matrix)         |
+| T-shirts, tops (experimental)                 | `clothing.top`                                                                             | 1 image + 4 to 11 points | PNG with transparent background             | photo + background removal                   |
+| Product thumbnail (optional, any type)        | field `thumbnail`                                                                          | 1 image                  | PNG, JPG, WebP or SVG, square, about 128 px | any                                          |
 
 Makeup, beauty filters and hair colors need **no files at all**: a color and a few numbers are enough.
 
@@ -415,13 +415,22 @@ Watches are moved 22 mm toward the forearm automatically. Rings sit between the 
 
 ### 4.8 Clothing (experimental)
 
-A 2D preview: a front facing garment photo is stretched onto the shopper's torso. Good for quick previews and campaigns, not for checking fit.
+A front facing garment photo fitted onto the shopper in 2D. With the full set of points the garment follows the body: sleeves turn with the arms, the sides follow the shape of the torso, and the folds and light of what the shopper has on show through. Good for previews and campaigns, not for checking size.
 
 1. Photograph the garment flat or on an invisible mannequin, front facing.
-2. Remove the background (Photoshop, remove.bg, Canva) and export a PNG about 1000 px tall.
-3. Note four points in image pixels (any editor shows cursor coordinates):
-   - `leftShoulder` and `rightShoulder`: shoulder seams. **`leftShoulder` is the wearer's left, which is on the right side of the image.**
-   - `leftHip` and `rightHip`: side seams at the hem.
+2. Remove the background (Photoshop, remove.bg, Canva) and export a PNG about 1000 px tall. Also erase the inside of the collar (the back of the shirt and any hanger), so the shopper's neck shows through.
+3. Note these points in image pixels (any editor shows cursor coordinates). **Left is the wearer's left, which is on the right side of the image.**
+
+| Point                           | Where                                       | Required |
+| ------------------------------- | ------------------------------------------- | -------- |
+| `leftShoulder`, `rightShoulder` | Top of the shoulder seams                   | Yes      |
+| `leftHip`, `rightHip`           | Side seams where the garment meets the hips | Yes      |
+| `neck`                          | Center front of the neckline (lowest point) | No       |
+| `leftArmpit`, `rightArmpit`     | Where each sleeve meets the side seam       | No       |
+| `leftSleeve`, `rightSleeve`     | Center of each sleeve opening               | No       |
+| `leftWaist`, `rightWaist`       | Narrowest point of each side seam           | No       |
+
+Any optional point turns on fitted mode. Mark all of them for the best result.
 
 ```json
 {
@@ -434,9 +443,16 @@ A 2D preview: a front facing garment photo is stretched onto the shopper's torso
     "leftShoulder": [352, 78],
     "rightShoulder": [160, 78],
     "leftHip": [378, 560],
-    "rightHip": [134, 560]
+    "rightHip": [134, 560],
+    "neck": [256, 76],
+    "leftArmpit": [380, 205],
+    "rightArmpit": [132, 205],
+    "leftSleeve": [450, 192],
+    "rightSleeve": [62, 192],
+    "leftWaist": [383, 400],
+    "rightWaist": [130, 400]
   },
-  "padding": 1.15,
+  "fit": 1.06,
   "variants": [
     { "id": "teal", "name": "Teal", "swatch": "#0F766E" },
     {
@@ -449,7 +465,12 @@ A 2D preview: a front facing garment photo is stretched onto the shopper's torso
 }
 ```
 
-Increase `padding` if the garment looks too narrow. Shoppers should stand 1.5 to 2 m from the camera.
+Tips:
+
+- Raise `fit` (for example 1.12) for oversized or boxy cuts, lower it toward 1 for slim fits.
+- For a garment longer than the hips, put `leftHip` and `rightHip` above the hem, where the hips are; the rest hangs below.
+- `shading` (0..1, default 0.6) controls how much of the light and folds underneath show through. Use a lower value for very light garments.
+- Shoppers should face the camera with both shoulders in view. Waist up framing works; the hips may be just below the frame.
 
 ## 5. Variants: colors, shades and styles
 

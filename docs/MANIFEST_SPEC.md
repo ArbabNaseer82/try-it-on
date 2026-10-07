@@ -191,14 +191,20 @@ The model is cloned for both ears (mirrored on the right ear). The far ear hides
 
 ### `clothing.top` (experimental)
 
-| Field     | Type                                                                                | Default  |
-| --------- | ----------------------------------------------------------------------------------- | -------- |
-| `image`   | URL to a front facing garment PNG with transparent background                       | required |
-| `anchors` | `{ leftShoulder, rightShoulder, leftHip, rightHip }`, each `[x, y]` in image pixels | required |
-| `padding` | 0.5..3, multiplier on detected shoulder width                                       | 1.15     |
-| `opacity` | 0..1                                                                                | 1        |
+| Field     | Type                                                                               | Default  |
+| --------- | ---------------------------------------------------------------------------------- | -------- |
+| `image`   | URL to a front facing garment PNG with transparent background                      | required |
+| `anchors` | Garment points, each `[x, y]` in image pixels (see below)                          | required |
+| `padding` | 0.5..3, multiplier on detected shoulder width (four point mode)                    | 1.15     |
+| `fit`     | 0.8..1.6, how loose the garment sits around the body (fitted mode)                 | 1.06     |
+| `shading` | 0..1, how much of the light and folds under the garment show through (fitted mode) | 0.6      |
+| `opacity` | 0..1                                                                               | 1        |
 
-`leftShoulder` is the wearer's left, which is on the right side of a front facing garment image. Limitations: front facing only, no arm occlusion, best at 1.5 to 2 m from the camera.
+Required anchors: `leftShoulder`, `rightShoulder` (top of the shoulder seams) and `leftHip`, `rightHip` (where the garment meets the hips). Left is the wearer's left, which is on the right side of a front facing garment image.
+
+Optional anchors turn on **fitted mode**: `neck` (center front of the neckline), `leftArmpit`, `rightArmpit`, `leftSleeve`, `rightSleeve` (center of each sleeve opening), `leftWaist`, `rightWaist`. Each point is pinned to the matching body point from pose tracking and the image bends smoothly in between: sleeves follow the upper arms, the sides follow the body outline measured from the person segmentation mask, and the garment picks up the light and folds of what the wearer has on. With only the four required anchors the garment is warped onto the torso as before.
+
+Limitations: front facing only, no arm occlusion (arms crossing in front of the body are covered by the garment).
 
 ## Loading sources
 

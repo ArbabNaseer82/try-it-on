@@ -23,6 +23,7 @@ export default tseslint.config(
       '**/next-env.d.ts',
       'packages/react-native/src/generated/runtime.js',
       'examples/expo-app/.expo/**',
+      'rawVideos/**',
     ],
   },
   js.configs.recommended,

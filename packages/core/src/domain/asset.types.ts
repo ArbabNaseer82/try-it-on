@@ -184,21 +184,42 @@ export interface FaceOverlay2DProps {
   opacity?: number;
 }
 
-/** Garment anchor points in image pixels. */
+/**
+ * Garment anchor points in image pixels. Left and right are the wearer's sides, so `leftShoulder`
+ * is on the right of a front facing garment image. The four corners are required. Adding the
+ * optional points turns on fitted mode: sleeves follow the arms and the sides follow the body.
+ */
 export interface ClothingAnchors {
+  /** Top of the shoulder seams. */
   leftShoulder: Vec2;
   rightShoulder: Vec2;
+  /** Hem corners, placed at the wearer's hips. */
   leftHip: Vec2;
   rightHip: Vec2;
+  /** Center front of the neckline. */
+  neck?: Vec2;
+  /** Where each sleeve meets the side seam. */
+  leftArmpit?: Vec2;
+  rightArmpit?: Vec2;
+  /** Center of each sleeve opening. */
+  leftSleeve?: Vec2;
+  rightSleeve?: Vec2;
+  /** Narrowest point of each side seam. */
+  leftWaist?: Vec2;
+  rightWaist?: Vec2;
 }
 
-/** @experimental Basic 2D garment overlay. Front facing only, no arm occlusion. */
+/** @experimental 2D garment fitted to the body. Front facing only, no arm occlusion. */
 export interface ClothingTopProps {
   /** URL of a front facing garment PNG with a transparent background. */
   image: string;
   anchors: ClothingAnchors;
-  /** Multiplier applied to the detected shoulder width, default 1.15 */
+  /** Multiplier applied to the detected shoulder width (four point mode), default 1.15 */
   padding?: number;
+  /** Fitted mode: how loose the garment sits, 1 follows the body outline, default 1.06 */
+  fit?: number;
+  /** Fitted mode: how much of the light and folds under the garment show through, 0..1, default 0.6 */
+  shading?: number;
   /** 0..1, default 1 */
   opacity?: number;
 }

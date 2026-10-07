@@ -47,6 +47,8 @@ export interface HandResult {
 export interface PoseResult {
   landmarks: Landmark[];
   worldLandmarks: Landmark[];
+  /** Person segmentation (0..255), when the tracker provides it. Used to follow the body outline. */
+  mask?: MaskResult | null;
 }
 
 /** A single channel mask, values 0..255, row major. */

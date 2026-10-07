@@ -155,6 +155,7 @@ export {
 } from './math/mat4';
 export { OneEuroFilter, VectorFilter, type OneEuroOptions } from './math/one-euro-filter';
 export { applyHomography, computeHomography, warpGrid, type Homography } from './math/homography';
+export { createMlsDeformer, deformGrid } from './math/mls';
 export { polygonArea, triangulate } from './math/polygon';
 
 // Anchors ---------------------------------------------------------------------
@@ -181,11 +182,19 @@ export {
   type HandAnchors,
 } from './anchors/hand-anchors';
 export {
+  BODY_RIG_LEVELS,
   computeBodyAnchors,
+  computeBodyRig,
   type BodyAnchorOptions,
   type BodyAnchors,
+  type BodyRig,
   type TorsoQuad,
 } from './anchors/body-anchors';
+export {
+  computeGarmentControls,
+  isFittedGarment,
+  type GarmentControls,
+} from './anchors/garment-fit';
 export {
   CANONICAL_FACE_WIDTH_MM,
   DEFAULT_IRIS_DIAMETER_MM,
